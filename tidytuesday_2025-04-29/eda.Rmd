@@ -10,5 +10,17 @@ runtime: shiny
 library(tidyverse)
 library(shiny)
 
-user2025 <- read_csv("data/user2025.csv")
+user2025 <- read_csv("data/user2025.csv") #reading the data set
+
+glimpse(user2025) #overview
 ```
+
+```{r sessions_by_date, echo=FALSE}
+renderPlot({
+  user2025 %>%
+    count(date) %>%
+    ggplot(aes(x = date, y = n)) +
+    geom_col(fill = "steelblue") +
+    labs(title = "Sessions by Date", x = "Date", y = "Number of Sessions") +
+    theme_minimal() #sessions per date
+})
