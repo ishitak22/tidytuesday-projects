@@ -7,51 +7,53 @@
 #    http://shiny.rstudio.com/
 #
 
-library(shiny)
-library(tidyverse)
-
-user2025 <- read_csv("tidytuesday_2025-04-29/data/user2025.csv")
-
-glimpse(user2025)
-
-
-# Define UI for application that draws a histogram
-ui <- fluidPage(
-
-    # Application title
-    titlePanel("Old Faithful Geyser Data"),
-
-    # Sidebar with a slider input for number of bins 
-    sidebarLayout(
-        sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
-        ),
-
-        # Show a plot of the generated distribution
-        mainPanel(
-           plotOutput("distPlot")
-        )
-    )
-)
-
-# Define server logic required to draw a histogram
-server <- function(input, output) {
-
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white',
-             xlab = 'Waiting time to next eruption (in mins)',
-             main = 'Histogram of waiting times')
-    })
-}
-
-# Run the application 
-shinyApp(ui = ui, server = server)
+# library(shiny)
+# library(tidyverse)
+# 
+# user2025 <- read_csv("data/user2025.csv")
+# 
+# glimpse(user2025)
+# 
+# # Define UI for application that draws a histogram
+# ui <- fluidPage(
+# 
+#     # App title
+#     titlePanel("TidyTuesday 29-04-2025 -- SessionS by Date"),
+# 
+#     # Sidebar with a slider input for number of bins 
+#     sidebarLayout(
+#         sidebarPanel(
+#             dateRangeInput(
+#               inputId = "date_range",
+#               label = "Filter sessions by date:",
+#               start = min(user2025$date, na.rm = TRUE),
+#               end = max(user2025$date, na.rm = TRUE)
+#             )
+#         ),
+# 
+#         mainPanel(
+#            plotOutput("sessionsPlot")
+#         )
+#     )
+# )
+# 
+# # Server
+# server <- function(input, output) {
+# 
+#     filtered_data <- reactive({
+#       user2025 %>%
+#         filter(date >= input$date_range[1], date <= input$date_range[2])
+#     })
+#     
+#     output$sessionsPlot <- renderPlot({
+#       filtered_data() %>%
+#         count(date) %>%
+#         ggplot(aes(x = date, y = n)) +
+#         geom_col(fill = "steelblue") +
+#         labs(title = "Sessions per date", x = "Date", y = "Number of Sessions") +
+#         theme_minimal()
+#     })
+# }
+# 
+# # Run the application 
+# shinyApp(ui, server)
