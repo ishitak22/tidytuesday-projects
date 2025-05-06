@@ -24,3 +24,23 @@ renderPlot({
     labs(title = "Sessions by Date", x = "Date", y = "Number of Sessions") +
     theme_minimal() #sessions per date
 })
+```
+
+```{top_keywords, echo=FALSE}
+inputPanel(
+  sliderInput("top_key", "Number of top keywords to display:", min = 5, max = 30, value = 10)
+)
+
+renderPlot({
+  user2025 %>%
+    separate_rows(keywords, sep = ";") %>%
+    filter(keywords != "") %>%
+    count(keywords, sort = TRUE) %>%
+    slice_max(n, n = input$top_n) %>%
+    ggplot(aes(x = reorder(keywords, n), y = n)) +
+    geom_col(fill = "darkorange") +
+    coord_flip() +
+    labs(title = "Top Keywords", x = "Keyword", y = "Count") +
+    theme_minimal() #interactive plot for top keywords
+})
+```
