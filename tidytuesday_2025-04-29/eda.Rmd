@@ -42,8 +42,7 @@ renderPlot({
   keyword_counts <- user2025 %>%
     separate_rows(keywords, sep = ",") %>%
     mutate(keywords = str_trim(keywords)) %>%
-    mutate(keywords = str_squish(keywords)) %>%
-    filter(keywords != "") %>%
+    mutate(keywords = str_squish(keywords)) %>% 
     count(keywords, sort = TRUE)
   
   keyword_counts %>%
@@ -57,8 +56,25 @@ renderPlot({
 })
 ```
 
+- Seeing which keywords tend to show up together in the same sessions
 
 ```{r}
+#prepare the data
+keyword_pairs <- user2025 %>%
+  mutate(id = row_number()) %>% #id for each session
+  separate_rows(keywords, sep = ",") %>% 
+  mutate(keywords = str_squish(str_trim(keywords))) %>% #remove whitespaces
+  filter(keywords != "", !is.na(session)) %>% #filter empty and missing
+  unite(session_key, session, id, remove = FALSE) %>% 
+  distinct(session_key, keywords) %>% #remove duplicate
+  pairwise_count(item = keywords, feature = session, sort = TRUE, upper = FALSE)
 
+filtered_pairs <- keyword_pairs %>%
+  filter(n >= 2) # only keeping pairs that had multiple occurrence 
+
+keyword_graph <- as_tbl_graph(filtered_pairs) #creating graph structure
 ```
+
+
+
 
