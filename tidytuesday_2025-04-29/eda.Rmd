@@ -58,21 +58,36 @@ renderPlot({
 
 - Seeing which keywords tend to show up together in the same sessions
 
-```{r}
+```{r keyword_network, echo=FALSE}
 #prepare the data
+renderPlot({
 keyword_pairs <- user2025 %>%
-  mutate(id = row_number()) %>% #id for each session
-  separate_rows(keywords, sep = ",") %>% 
-  mutate(keywords = str_squish(str_trim(keywords))) %>% #remove whitespaces
-  filter(keywords != "", !is.na(session)) %>% #filter empty and missing
-  unite(session_key, session, id, remove = FALSE) %>% 
-  distinct(session_key, keywords) %>% #remove duplicate
-  pairwise_count(item = keywords, feature = session, sort = TRUE, upper = FALSE)
+  mutate(id = row_number()) %>%
+  separate_rows(keywords, sep = ",") %>%
+  mutate(keywords = str_squish(str_trim(keywords))) %>%
+  filter(keywords != "", !is.na(session)) %>%
+  unite(session_key, session, id, remove = FALSE) %>%
+  distinct(session_key, keywords) %>%
+  pairwise_count(item = keywords, feature = session_key, sort = TRUE, upper = FALSE)
 
 filtered_pairs <- keyword_pairs %>%
   filter(n >= 2) # only keeping pairs that had multiple occurrence 
 
 keyword_graph <- as_tbl_graph(filtered_pairs) #creating graph structure
+
+ggraph(keyword_graph, layout = "fr") +                           
+  geom_edge_link(aes(width = n),                                
+                 edge_colour = "tomato", alpha = 0.6) +
+  geom_node_point(color = "orange", size = 4) +                  
+  geom_node_text(aes(label = name),                             
+                 repel = TRUE, size = 3.5) +
+  theme_void() +                                                 
+  labs(
+    title = "Keyword Co-occurrence Network by Session",          
+    subtitle = "Edges connect keywords frequently co-mentioned across sessions",  
+    caption = "Edge thickness = frequency of co-occurrence\nData: useR! 2025 Conference Program" 
+  )
+})
 ```
 
 
