@@ -9,10 +9,16 @@ runtime: shiny
 ```{r setup, include=FALSE}
 library(tidyverse)
 library(shiny)
+library(widyr)
+library(ggraph)
+library(tidygraph)
+library(igraph)
 
 user2025 <- read_csv("data/user2025.csv") #reading the data set
 
 glimpse(user2025) #overview
+
+head(user2025$keywords, 10)
 ```
 
 ```{r sessions_by_date, echo=FALSE}
@@ -26,21 +32,26 @@ renderPlot({
 })
 ```
 
-```{top_keywords, echo=FALSE}
+```{r top_keywords, echo=FALSE}
 inputPanel(
   sliderInput("top_key", "Number of top keywords to display:", min = 5, max = 30, value = 10)
 )
 
 renderPlot({
-  user2025 %>%
-    separate_rows(keywords, sep = ";") %>%
+  keyword_counts <- user2025 %>%
+    separate_rows(keywords, sep = ",") %>%
+    mutate(keywords = str_trim(keywords)) %>%
+    mutate(keywords = str_squish(keywords)) %>%
     filter(keywords != "") %>%
-    count(keywords, sort = TRUE) %>%
-    slice_max(n, n = input$top_n) %>%
-    ggplot(aes(x = reorder(keywords, n), y = n)) +
+    count(keywords, sort = TRUE)
+  
+  keyword_counts %>%
+    slice_max(n, n = input$top_key) %>%
+    mutate(keyword_short = str_wrap(str_trunc(keywords, width = 40), width = 20)) %>%
+    ggplot(aes(x = reorder(keyword_short, n), y = n)) +
     geom_col(fill = "darkorange") +
     coord_flip() +
     labs(title = "Top Keywords", x = "Keyword", y = "Count") +
-    theme_minimal() #interactive plot for top keywords
+    theme_minimal(base_size = 13)
 })
 ```
