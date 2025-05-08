@@ -13,6 +13,7 @@ library(widyr)
 library(ggraph)
 library(tidygraph)
 library(igraph)
+library(tidytext)
 
 user2025 <- read_csv("data/user2025.csv") #reading the data set
 
@@ -55,3 +56,9 @@ renderPlot({
     theme_minimal(base_size = 13)
 })
 ```
+
+
+```{r}
+
+```
+
