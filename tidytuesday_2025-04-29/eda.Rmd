@@ -75,17 +75,23 @@ filtered_pairs <- keyword_pairs %>%
 
 keyword_graph <- as_tbl_graph(filtered_pairs) #creating graph structure
 
-ggraph(keyword_graph, layout = "fr") +                           
-  geom_edge_link(aes(width = n),                                
-                 edge_colour = "tomato", alpha = 0.6) +
-  geom_node_point(color = "orange", size = 4) +                  
-  geom_node_text(aes(label = name),                             
-                 repel = TRUE, size = 3.5) +
-  theme_void() +                                                 
+ggraph(keyword_graph, layout = "fr") +
+  geom_edge_link(aes(width = n), 
+                 edge_colour = "#4D4D4D", alpha = 1) +
+  geom_node_point(color = "#001F54", fill = "#F39C12", size = 12, shape = 21, stroke = 0.5) +
+  geom_node_text(aes(label = name), 
+                 repel = TRUE, size = 4.5, color = "#001F54", fontface = "bold", hjust = -0.2, vjust = 0.5) +
+  scale_edge_width(range = c(0.5, 3), guide = "legend") +
+  theme_void(base_family = "Arial") +
+  theme(
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5, color = "#001F54"),
+    plot.subtitle = element_text(size = 12, hjust = 0.5, color = "#444444"),
+    plot.caption = element_text(size = 9, hjust = 1, color = "gray40")
+  ) +
   labs(
-    title = "Keyword Co-occurrence Network by Session",          
-    subtitle = "Edges connect keywords frequently co-mentioned across sessions",  
-    caption = "Edge thickness = frequency of co-occurrence\nData: useR! 2025 Conference Program" 
+    title = "Keyword Co-occurrence Network by Session",
+    subtitle = "Vivid connections between frequently co-mentioned terms",
+    caption = "Source: useR! 2025 Conference Program"
   )
 })
 ```
