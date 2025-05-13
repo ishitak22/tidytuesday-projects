@@ -23,7 +23,7 @@ nsf_data <- nsf_data %>%
 ```
 
 
-```{r glimpse, include=FALSE}
+```{r glimpse}
 glimpse(nsf_data)
 
 summary(nsf_data)
@@ -44,6 +44,11 @@ To explore this I have chosen a *Gantt chart* as an interactive chart where user
 - How early grants were terminated.
 - Whether certain NSF directorates see earlier terminations than others.
 
+```{r ui, echo=TRUE}
+selectInput("dir", "Select a Directorate:",
+            choices = unique(nsf_data$directorate),
+            selected = unique(nsf_data$directorate)[1])
+```
 
 
 
