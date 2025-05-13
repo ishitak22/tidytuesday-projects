@@ -9,9 +9,19 @@ runtime: shiny
 ```{r load_dataset, include=FALSE}
 library(tidyverse)
 library(readr)
+library(lubridate)
 
-nsf_data <- read_csv("tidytuesday_2025-05-06/data/nsf_terminations.csv")
+nsf_data <- read_csv("data/nsf_terminations.csv")
 ```
+
+```{r prepare_rows, include=FALSE}
+nsf_data <- nsf_data %>%
+  mutate(start = nsf_startdate,
+         term = termination_letter_date,
+         end = nsf_expected_end_date) %>%
+  select(-nsf_startdate, -termination_letter_date, -nsf_expected_end_date)
+```
+
 
 ```{r glimpse, include=FALSE}
 glimpse(nsf_data)
@@ -20,6 +30,19 @@ summary(nsf_data)
 
 head(nsf_data)
 ```
+
+# Grant termination Timeline
+
+#### How long is the duration of NSF project are before they are terminated and how far were they from their expected end date 
+
+To explore this I have chosen a *Gantt chart* as an interactive chart where user can use the directorate they want to see information about:
+- starting point should be the project start date
+- end point should be the termination letter received date 
+- dotted line from the end date should be to the point which tells the end date of the project
+
+#### Answer we are looking for:
+- How early grants were terminated.
+- Whether certain NSF directorates see earlier terminations than others.
 
 
 
