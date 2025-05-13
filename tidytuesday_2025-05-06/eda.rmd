@@ -50,5 +50,13 @@ selectInput("dir", "Select a Directorate:",
             selected = unique(nsf_data$directorate)[1])
 ```
 
+```{r gantt_plot, echo=FALSE}
+renderPlot({
+  filtered <- nsf_data %>%
+    filter(directorate == input$dir) %>%
+    arrange(term) %>%
+    mutate(project_id = row_number())
+})
+```
 
 
