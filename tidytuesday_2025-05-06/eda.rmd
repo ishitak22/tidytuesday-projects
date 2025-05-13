@@ -51,22 +51,43 @@ selectInput("dir", "Select a Directorate:",
 ```
 
 ```{r gantt_plot, echo=FALSE}
-renderPlot({
-  filtered <- nsf_data %>%
-    filter(directorate == input$dir) %>%
-    arrange(term) %>%
-    mutate(project_id = row_number())
-  
-ggplot(filtered, aes(y = reorder(project_id, -project_id))) +
-  geom_segment(aes(x = start, xend = term, yend = project_id), color = "black") +
-  geom_segment(aes(x = term, xend = end, yend = project_id), linetype = "dotted", color = "gray50") +
-  geom_point(aes(x = start), color = "blue", size = 2) +
-  geom_point(aes(x = term), color = "red", size = 2) +
-  geom_point(aes(x = end), color = "darkgreen", size = 2) +
-  labs(title = paste("NSF Projects Timeline for", input$dir, "Directorate"),
-       x = "Date", y = "Projects") +
-  theme_minimal()
-})
+# renderPlot({
+#   filtered <- nsf_data %>%
+#     filter(directorate == input$dir) %>%
+#     arrange(start) %>%
+#     slice_head(n = 10) %>%
+#     mutate(project_id = row_number())
+#   
+# ggplot(filtered, aes(y = reorder(project_id, -project_id))) +
+#   geom_segment(aes(x = start, xend = term, yend = project_id), color = "black") +
+#   geom_segment(aes(x = term, xend = end, yend = project_id), linetype = "dotted", color = "gray50") +
+#   geom_point(aes(x = start), color = "blue", size = 2) +
+#   geom_point(aes(x = term), color = "red", size = 2) +
+#   geom_point(aes(x = end), color = "darkgreen", size = 2) +
+#   labs(title = paste("NSF Projects Timeline for", input$dir, "Directorate"),
+#        x = "Date", y = "Projects") +
+#   theme_minimal()
+# })
 ```
 
+```{r plotting, echo=FALSE}
+renderPlot({
+  filtered <- nsf_data %>%
+  filter(directorate == input$dir) %>%
+  arrange(start) %>%
+  slice_head(n = 40) %>%
+  mutate(label = paste(org_name, " - ", substr(grant_number, 1, 5)))
+
+ggplot(filtered, aes(y = reorder(label, -start))) +
+  geom_segment(aes(x = start, xend = term, y = label, yend = label), color = "black", size = 1) +
+  geom_segment(aes(x = term, xend = end, y = label, yend = label), linetype = "dotted", color = "gray50") +
+  geom_point(aes(x = start, y = label), color = "blue", size = 2) +
+  geom_point(aes(x = term, y = label), color = "red", size = 2) +
+  geom_point(aes(x = end, y = label), color = "darkgreen", size = 2) +
+  labs(title = paste("Project Duration vs. Termination –", input$dir),
+       x = "Date", y = "Projects") +
+  theme_minimal() +
+  theme(axis.text.y = element_text(size = 6))
+})
+```
 
