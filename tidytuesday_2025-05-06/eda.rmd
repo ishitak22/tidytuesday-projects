@@ -56,6 +56,16 @@ renderPlot({
     filter(directorate == input$dir) %>%
     arrange(term) %>%
     mutate(project_id = row_number())
+  
+ggplot(filtered, aes(y = reorder(project_id, -project_id))) +
+  geom_segment(aes(x = start, xend = term, yend = project_id), color = "black") +
+  geom_segment(aes(x = term, xend = end, yend = project_id), linetype = "dotted", color = "gray50") +
+  geom_point(aes(x = start), color = "blue", size = 2) +
+  geom_point(aes(x = term), color = "red", size = 2) +
+  geom_point(aes(x = end), color = "darkgreen", size = 2) +
+  labs(title = paste("NSF Projects Timeline for", input$dir, "Directorate"),
+       x = "Date", y = "Projects") +
+  theme_minimal()
 })
 ```
 
