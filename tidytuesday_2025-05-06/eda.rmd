@@ -47,7 +47,7 @@ To explore this I have chosen a *Gantt chart* as an interactive chart where user
 
 ```{r ui, echo=FALSE}
 selectInput("dir", "Select a Directorate:",
-            choices = unique(nsf_data$directorate),
+            choices = unique(na.omit(nsf_data$directorate)),
             selected = unique(nsf_data$directorate)[1])
 ```
 
