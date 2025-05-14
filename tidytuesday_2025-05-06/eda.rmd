@@ -28,7 +28,8 @@ nsf_data <- nsf_data %>%
 ```{r agg_frequency, include=FALSE}
 state_counts <- nsf_data %>%
   filter(!is.na(org_state)) %>%
-  count(org_state, name = "termination_count")
+  count(org_state, name = "termination_count") %>%
+  rename(state = org_state)
 ```
 
 
@@ -45,13 +46,13 @@ head(nsf_data)
 #### How long is the duration of NSF project are before they are terminated and how far were they from their expected end date?
 
 To explore this, I have chosen a *Gantt chart* as an interactive chart where user can use the directorate they want to see information about:
-- starting point should be the project start date
-- end point should be the termination letter received date 
-- dotted line from the end date should be to the point which tells the end date of the project
+ - starting point should be the project start date
+ - end point should be the termination letter received date 
+ - dotted line from the end date should be to the point which tells the end date of the project
 
 #### Answer we are looking for:
-- How early grants were terminated.
-- Whether certain NSF directorates see earlier terminations than others.
+ - How early grants were terminated.
+ - Whether certain NSF directorates see earlier terminations than others.
 
 ```{r ui, echo=FALSE}
 selectInput("dir", "Select a Directorate:",
@@ -108,18 +109,18 @@ ggplotly(p, tooltip = "text")
 #### Which U.S. states saw the highest number of NSF grant terminations?
 
 To explore this, I have created a U.S. state heatmap that visualizes the frequency of terminated grants based on the organisations location"
-- Each state is shaded based on the number of terminations affecting organizations located there.
-- Darker shades indicate higher termination counts.
+ - Each state is shaded based on the number of terminations affecting organizations located there.
+ - Darker shades indicate higher termination counts.
 
 #### Answer we are looking for:
-- Do certain high-output states like California or New York dominate terminations, or was it more widespread?
-- Are there outlier states that had disproportionately high or low termination counts relative to their research footprint?
+ - Do certain high-output states like California or New York dominate terminations, or was it more widespread?
+ - Are there outlier states that had disproportionately high or low termination counts relative to their research footprint?
 
-# ```{r}
-# plot_usmap(data = state_counts, values = "termination_count", color = "white") +
-#   scale_fill_continuous(low = "yellow", high = "red", name = "Terminations", label = scales::comma) +
-#   labs(title = "NSF Grant Terminations in U.S. States (2025)",
-#        subtitle = "Darker = More Terminations") +
-#   theme(legend.position = "right")
-# ```
+```{r term_heatmap, echo=FALSE}
+ plot_usmap(data = state_counts, values = "termination_count", color = "white") +
+   scale_fill_continuous(low = "yellow", high = "red", name = "Terminations", label = scales::comma) +
+   labs(title = "NSF Grant Terminations in U.S. States (2025)",
+       subtitle = "Darker = More Terminations") +
+  theme(legend.position = "right")
+```
 
