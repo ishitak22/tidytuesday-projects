@@ -10,6 +10,7 @@ runtime: shiny
 library(tidyverse)
 library(readr)
 library(lubridate)
+library(plotly)
 
 nsf_data <- read_csv("data/nsf_terminations.csv")
 ```
@@ -23,7 +24,7 @@ nsf_data <- nsf_data %>%
 ```
 
 
-```{r glimpse}
+```{r glimpse, include=FALSE}
 glimpse(nsf_data)
 
 summary(nsf_data)
@@ -31,7 +32,7 @@ summary(nsf_data)
 head(nsf_data)
 ```
 
-# Grant termination Timeline
+# Grant Termination Timeline
 
 #### How long is the duration of NSF project are before they are terminated and how far were they from their expected end date 
 
@@ -44,7 +45,7 @@ To explore this I have chosen a *Gantt chart* as an interactive chart where user
 - How early grants were terminated.
 - Whether certain NSF directorates see earlier terminations than others.
 
-```{r ui, echo=TRUE}
+```{r ui, echo=FALSE}
 selectInput("dir", "Select a Directorate:",
             choices = unique(nsf_data$directorate),
             selected = unique(nsf_data$directorate)[1])
@@ -71,23 +72,25 @@ selectInput("dir", "Select a Directorate:",
 ```
 
 ```{r plotting, echo=FALSE}
-renderPlot({
+renderPlotly({
   filtered <- nsf_data %>%
   filter(directorate == input$dir) %>%
   arrange(start) %>%
-  slice_head(n = 40) %>%
+  slice_head(n = 30) %>%
   mutate(label = paste(org_name, " - ", substr(grant_number, 1, 5)))
 
-ggplot(filtered, aes(y = reorder(label, -start))) +
-  geom_segment(aes(x = start, xend = term, y = label, yend = label), color = "black", size = 1) +
-  geom_segment(aes(x = term, xend = end, y = label, yend = label), linetype = "dotted", color = "gray50") +
-  geom_point(aes(x = start, y = label), color = "blue", size = 2) +
-  geom_point(aes(x = term, y = label), color = "red", size = 2) +
-  geom_point(aes(x = end, y = label), color = "darkgreen", size = 2) +
+p <- ggplot(filtered, aes(y = reorder(label, -start))) +
+  geom_segment(aes(x = start, xend = term, y = label, yend = label, text = paste("Start:", start, "<br>Term:", term)), color = "black", size = 1) +
+  geom_segment(aes(x = term, xend = end, y = label, yend = label, text = paste("Term:", term, "<br>End:", end)), linetype = "dotted", color = "gray50") +
+  geom_point(aes(x = start, y = label, text = paste("Start:", start)), color = "blue", size = 2) +
+  geom_point(aes(x = term, y = label, text = paste("Term:", term)), color = "red", size = 2) +
+  geom_point(aes(x = end, y = label, text = paste("End:", end)), color = "darkgreen", size = 2) +
   labs(title = paste("Project Duration vs. Termination –", input$dir),
        x = "Date", y = "Projects") +
   theme_minimal() +
   theme(axis.text.y = element_text(size = 6))
+
+ggplotly(p, tooltip = "text")
 })
 ```
 
