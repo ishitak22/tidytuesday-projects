@@ -13,6 +13,7 @@ library(lubridate)
 library(plotly)
 library(usmap)
 library(ggplot2)
+library(dplyr)
 
 nsf_data <- read_csv("data/nsf_terminations.csv")
 ```
@@ -30,6 +31,10 @@ state_counts <- nsf_data %>%
   filter(!is.na(org_state)) %>%
   count(org_state, name = "termination_count") %>%
   rename(state = org_state)
+
+state_counts_full <- state_counts %>%
+  right_join(tibble(state = state.abb, full_name = state.name), by = "state") %>%
+  mutate(termination_count = if_else(is.na(termination_count), 0, termination_count))
 ```
 
 
@@ -121,6 +126,9 @@ To explore this, I have created a U.S. state heatmap that visualizes the frequen
    scale_fill_continuous(low = "yellow", high = "red", name = "Terminations", label = scales::comma) +
    labs(title = "NSF Grant Terminations in U.S. States (2025)",
        subtitle = "Darker = More Terminations") +
-  theme(legend.position = "right")
+  theme(plot.title = element_text(size = 16, face = "bold"),
+        plot.subtitle = element_text(size = 12),
+        legend.title = element_text(face = "bold"),
+        legend.position = "right")
 ```
 
