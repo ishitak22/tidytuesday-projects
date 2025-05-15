@@ -122,13 +122,23 @@ To explore this, I have created a U.S. state heatmap that visualizes the frequen
  - Are there outlier states that had disproportionately high or low termination counts relative to their research footprint?
 
 ```{r term_heatmap, echo=FALSE}
- plot_usmap(data = state_counts, values = "termination_count", color = "white") +
-   scale_fill_continuous(low = "yellow", high = "red", name = "Terminations", label = scales::comma) +
-   labs(title = "NSF Grant Terminations in U.S. States (2025)",
-       subtitle = "Darker = More Terminations") +
-  theme(plot.title = element_text(size = 16, face = "bold"),
-        plot.subtitle = element_text(size = 12),
-        legend.title = element_text(face = "bold"),
-        legend.position = "right")
+ # plot_usmap(data = state_counts, values = "termination_count", color = "white") +
+ #   scale_fill_continuous(low = "yellow", high = "red", name = "Terminations", label = scales::comma) +
+ #   labs(title = "NSF Grant Terminations in U.S. States (2025)",
+ #       subtitle = "Darker = More Terminations") +
+ #  theme(plot.title = element_text(size = 16, face = "bold"),
+ #        plot.subtitle = element_text(size = 12),
+ #        legend.title = element_text(face = "bold"),
+ #        legend.position = "right")
+```
+
+```{r tool_heatmap, echo=FALSE}
+plot_geo(state_counts_full, locationmode = "USA-states") %>%
+  add_trace(z = ~termination_count, locations = ~state, text = ~paste(full_name, "<br>Terminations:", termination_count),
+            hoverinfo = "text", color = ~termination_count, colors = c("yellow", "orange", "red", "darkred"),
+            type = "choropleth") %>%
+  layout(geo = list(scope = "usa"),
+        title = "NSF Grant Terminations in U.S. States (2025)",
+        margin = list(t = 50))
 ```
 
