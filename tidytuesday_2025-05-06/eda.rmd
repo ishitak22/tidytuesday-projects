@@ -143,3 +143,13 @@ output$state_heatmap <- renderPlotly({plot_geo(state_counts_full, locationmode =
 })
 ```
 
+<!-- We want to store what state the user clicks -->
+
+```{r click_state, echo=FALSE}
+clicked_state <- reactive({
+  event <- event_data("plotly_click") #listen for a click on the map
+  if (is.null(event)) return(NULL) #if no one has clicked
+  event$location #this gives us the state abbreviations
+})
+```
+
