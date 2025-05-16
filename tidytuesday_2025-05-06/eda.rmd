@@ -154,3 +154,24 @@ clicked_state <- reactive({
 })
 ```
 
+<!-- 
+We want to prepare a clean list of organization locations to geocode.
+
+Steps:
+- unique organisation location
+- create a address string
+-->
+
+```{r}
+# org_locations <- nsf_data %>%
+#   distinct(org_name, org_city, org_state) %>%
+#   mutate(address = paste(org_name, org_city, org_state, "USA"))
+```
+
+<!-- send those addresses to OpenStreetmap (Geocoding services) to get latitudes and longitudes -->
+
+```{r}
+# org_locations <- org_locations %>%
+#   geocode(address, method = "osm", lat = latitude, long = longitude)
+```
+
