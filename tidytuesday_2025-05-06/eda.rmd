@@ -133,12 +133,13 @@ To explore this, I have created a U.S. state heatmap that visualizes the frequen
 ```
 
 ```{r tool_heatmap, echo=FALSE}
-plot_geo(state_counts_full, locationmode = "USA-states") %>%
+output$state_heatmap <- renderPlotly({plot_geo(state_counts_full, locationmode = "USA-states") %>%
   add_trace(z = ~termination_count, locations = ~state, text = ~paste(full_name, "<br>Terminations:", termination_count),
             hoverinfo = "text", color = ~termination_count, colors = c("yellow", "orange", "red", "darkred"),
             type = "choropleth") %>%
   layout(geo = list(scope = "usa"),
         title = "NSF Grant Terminations in U.S. States (2025)",
         margin = list(t = 50))
+})
 ```
 
