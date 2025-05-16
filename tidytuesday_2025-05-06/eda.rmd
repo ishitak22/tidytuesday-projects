@@ -121,6 +121,11 @@ To explore this, I have created a U.S. state heatmap that visualizes the frequen
 #### Answer we are looking for:
  - Do certain high-output states like California or New York dominate terminations, or was it more widespread?
  - Are there outlier states that had disproportionately high or low termination counts relative to their research footprint?
+ 
+#### Interactive Heatmap:
+ - User can click the state they want to see more details on.
+ - The bar plot shows of the organisations in that particular state with number of terminations
+ - Then user can click particular bar or organisation to see more details department wise
 
 ```{r term_heatmap, echo=FALSE}
  # plot_usmap(data = state_counts, values = "termination_count", color = "white") +
@@ -174,4 +179,8 @@ Steps:
 # org_locations <- org_locations %>%
 #   geocode(address, method = "osm", lat = latitude, long = longitude)
 ```
+
+<!-- Showing bar chart in the particular state clicked -->
+
+
 
