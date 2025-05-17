@@ -50,16 +50,21 @@ head(nsf_data)
 
 # Grant Termination Timeline
 
-#### How long is the duration of NSF project are before they are terminated and how far were they from their expected end date?
+### Question: 
+*How long is the duration of NSF project are before they are terminated and how far were they from their expected end date?*
 
+### Approach:
 To explore this, I have chosen a *Gantt chart* as an interactive chart where user can use the directorate they want to see information about:
  - starting point should be the project start date
  - end point should be the termination letter received date 
  - dotted line from the end date should be to the point which tells the end date of the project
 
-#### Answer we are looking for:
+### Answer we are looking for:
  - How early grants were terminated.
  - Whether certain NSF directorates see earlier terminations than others.
+ 
+### Interactive Gantt chart:
+ - Users can select an NSF directorate to explore its project timelines
 
 ```{r ui, echo=FALSE}
 selectInput("dir", "Select a Directorate:",
@@ -113,20 +118,21 @@ ggplotly(p, tooltip = "text")
 
 # Termination Hotspots Across U.S. States
 
-#### Which U.S. states saw the highest number of NSF grant terminations?
+### Question:
+*Which U.S. states saw the highest number of NSF grant terminations?*
 
+### Approach:
 To explore this, I have created a U.S. state heatmap that visualizes the frequency of terminated grants based on the organisations location"
  - Each state is shaded based on the number of terminations affecting organizations located there.
  - Darker shades indicate higher termination counts.
 
-#### Answer we are looking for:
+### Answer we are looking for:
  - Do certain high-output states like California or New York dominate terminations, or was it more widespread?
  - Are there outlier states that had disproportionately high or low termination counts relative to their research footprint?
  
-#### Interactive Heatmap:
+### Interactive Heatmap:
  - User can click the state they want to see more details on.
- - The bar plot shows of the organisations in that particular state with number of terminations
- - Then user can click particular bar or organisation to see more details department wise
+ - The bar plot shows of the organisations in that particular state with number of terminations 
 
 ```{r term_heatmap, echo=FALSE}
  # plot_usmap(data = state_counts, values = "termination_count", color = "white") +
@@ -178,7 +184,7 @@ Steps:
 - create a address string
 -->
 
-```{r}
+```{r include=FALSE}
 # org_locations <- nsf_data %>%
 #   distinct(org_name, org_city, org_state) %>%
 #   mutate(address = paste(org_name, org_city, org_state, "USA"))
@@ -186,7 +192,7 @@ Steps:
 
 <!-- send those addresses to OpenStreetmap (Geocoding services) to get latitudes and longitudes -->
 
-```{r}
+```{r include=FALSE}
 # org_locations <- org_locations %>%
 #   geocode(address, method = "osm", lat = latitude, long = longitude)
 ```
@@ -202,10 +208,13 @@ output$org_barplot <- renderPlotly({
     count(org_name, sort = TRUE) %>%
     slice_max(n, n = 30) %>%
     plot_ly(x = ~n, y = ~reorder(org_name, n), type = 'bar', orientation = 'h',text = ~paste("Terminations:", n),
-  hoverinfo = "text", textposition = "none") %>%
-    layout(title = paste("Top Organisations in", clicked_state()),
-  xaxis = list(title = "Terminations"),
-  yaxis = list(title = ""))
+  hoverinfo = "text", textposition = "none", marker = list(color = "firebrick")) %>%
+    layout(
+  title = list(text = paste("Top Organisations by Terminations in", clicked_state()), font = list(size = 16)),
+  xaxis = list(title = "Number of Terminations"),
+  yaxis = list(title = "Organisation", automargin = TRUE),
+  margin = list(l = 100, r = 20, t = 60, b = 40)
+)
 })
 ```
 
