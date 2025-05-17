@@ -138,8 +138,8 @@ To explore this, I have created a U.S. state heatmap that visualizes the frequen
  #        legend.position = "right")
 ```
 
-```{r tool_heatmap, echo=FALSE}
-output$state_heatmap <- renderPlotly({plot_geo(state_counts_full, locationmode = "USA-states") %>%
+```{r tool_heatmap, include=FALSE}
+output$state_heatmap <- renderPlotly({plot_geo(state_counts_full, locationmode = "USA-states", source = "heatmap") %>%
   add_trace(z = ~termination_count, locations = ~state, text = ~paste(full_name, "<br>Terminations:", termination_count),
             hoverinfo = "text", color = ~termination_count, colors = c("yellow", "orange", "red", "darkred"),
             type = "choropleth") %>%
@@ -147,13 +147,14 @@ output$state_heatmap <- renderPlotly({plot_geo(state_counts_full, locationmode =
         title = "NSF Grant Terminations in U.S. States (2025)",
         margin = list(t = 50))
 })
+
 ```
 
 <!-- We want to store what state the user clicks -->
 
 ```{r click_state, echo=FALSE}
 clicked_state <- reactive({
-  event <- event_data("plotly_click") #listen for a click on the map
+  event <- event_data("plotly_click", source = "heatmap") #listen for a click on the map
   if (is.null(event)) return(NULL) #if no one has clicked
   event$location #this gives us the state abbreviations
 })
@@ -182,5 +183,26 @@ Steps:
 
 <!-- Showing bar chart in the particular state clicked -->
 
+```{r click_barplot, include=FALSE}
+output$org_barplot <- renderPlotly({
+  req(clicked_state())
+  
+  nsf_data %>%
+    filter(org_state == clicked_state()) %>%
+    count(org_name, sort = TRUE) %>%
+    slice_max(n, n = 10) %>%
+    plot_ly(x = ~n, y = ~reorder(org_name, n), type = 'bar', orientation = 'h') %>%
+    layout(title = paste("Top Organisations in", clicked_state()),
+  xaxis = list(title = "Terminations"),
+  yaxis = list(title = ""))
+})
+```
 
+```{r show_heatmap, echo=FALSE}
+plotlyOutput("state_heatmap")
+```
+
+```{r show_barplot, echo=FALSE}
+plotlyOutput("org_barplot")
+```
 
