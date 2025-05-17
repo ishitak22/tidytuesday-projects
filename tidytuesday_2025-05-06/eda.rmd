@@ -200,8 +200,9 @@ output$org_barplot <- renderPlotly({
   nsf_data %>%
     filter(org_state == clicked_state()) %>%
     count(org_name, sort = TRUE) %>%
-    slice_max(n, n = 10) %>%
-    plot_ly(x = ~n, y = ~reorder(org_name, n), type = 'bar', orientation = 'h') %>%
+    slice_max(n, n = 30) %>%
+    plot_ly(x = ~n, y = ~reorder(org_name, n), type = 'bar', orientation = 'h',text = ~paste("Terminations:", n),
+  hoverinfo = "text", textposition = "none") %>%
     layout(title = paste("Top Organisations in", clicked_state()),
   xaxis = list(title = "Terminations"),
   yaxis = list(title = ""))
