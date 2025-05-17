@@ -6,6 +6,20 @@ output: html_document
 runtime: shiny
 ---
 
+```{r setup-css, echo=FALSE, results='asis'}
+cat("
+<style>
+  body {
+    background-color: #fdf6f0; /* light beige */
+  }
+  .main-container {
+    background-color: #fdf6f0;
+  }
+</style>
+")
+```
+
+
 ```{r load_dataset, include=FALSE}
 library(tidyverse)
 library(readr)
