@@ -11,6 +11,7 @@ library(tidyverse)
 library(readr)
 library(lubridate)
 library(plotly)
+library(shiny)
 library(usmap)
 library(ggplot2)
 library(dplyr)
@@ -157,7 +158,16 @@ clicked_state <- reactive({
   event <- event_data("plotly_click", source = "heatmap") #listen for a click on the map
   if (is.null(event)) return(NULL) #if no one has clicked
   event$location #this gives us the state abbreviations
+
+  # Use pointNumber to find the matching state
+  clicked_index <- event$pointNumber + 1  # R is 1-indexed
+  state_counts_full$state[clicked_index]
 })
+
+observe({
+  print(event_data("plotly_click", source = "heatmap"))
+})
+
 ```
 
 <!-- 
