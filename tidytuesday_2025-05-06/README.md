@@ -10,4 +10,4 @@ Dataset containing records of terminated National Science Foundation (NSF) grant
 
 # Usage
 
-Ideal for analyzing trends in NSF funding, exploring reasons behind grant terminations, and assessing funding patterns across different institutions, geographical locations, and research fields.
+Ideal for analysing trends in NSF funding, exploring reasons behind grant terminations, and assessing funding patterns across different institutions, geographical locations, and research fields.
