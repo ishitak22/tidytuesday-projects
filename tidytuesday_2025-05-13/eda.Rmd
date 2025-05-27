@@ -8,10 +8,14 @@ runtime: shiny
 
 ```{r}
 library(tidyverse)
+library(dplyr)
 
 vesuvius <- read_csv("tidytuesday_2025-05-13/data/vesuvius.csv")
 ```
 
+```{r exploring, include = FALSE}
+glimpse(vesuvius)
+```
 
 
 
