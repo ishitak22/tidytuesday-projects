@@ -17,5 +17,11 @@ vesuvius <- read_csv("tidytuesday_2025-05-13/data/vesuvius.csv")
 glimpse(vesuvius)
 ```
 
+<!-- making an input slider filter as a ui shiny element, range of years -->
+
+```{r}
+sliderInput("yearRange", "Select year:",
+            min = 2011, max = 2025, value = c(2013, 2025), sep = "")
+```
 
 
