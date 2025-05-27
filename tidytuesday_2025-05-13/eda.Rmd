@@ -31,3 +31,16 @@ selectInput("review", "Review Level:",
             choices = c("All", "revised", "preliminary"), selected = "All")
 ```
 
+# Seismic Activity Timeline
+
+### Question:
+*How has the number and severity of seismic events changed over the last decade?*
+
+### Approach:
+To explore this, I have chosen *Area and Line chart* where users can filter the time period and review level:
+ - The **tan area** represents the number of seismic events per year.
+ - The **red line** tracks the average magnitude each year.
+ 
+### Answer we are looking for:
+ - How has the frequency of seismic activity evolved over time?
+ - Are higher magnitude events gradually becoming more or less frequent?
