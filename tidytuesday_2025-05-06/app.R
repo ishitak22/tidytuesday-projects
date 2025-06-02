@@ -24,7 +24,59 @@ state_counts_full <- state_counts %>%
 
 # UI
 ui <- fluidPage(
-  titlePanel("NSF Terminations Analysis"),
+  tags$head(
+    tags$style(HTML("
+      body {
+        background-color: #2c3e50;
+        color: white;
+        font-family: 'Segoe UI', sans-serif;
+      }
+
+      h2, h3, h4, h5 {
+        color: white;
+      }
+
+      .container-fluid, .main-container {
+        background-color: #2c3e50 !important;
+      }
+
+      .well, .panel, .form-group {
+        background-color: rgba(255,255,255,0.05);
+        border: none;
+      }
+
+      label, .control-label, .selectize-input {
+        color: white;
+        font-weight: bold;
+      }
+
+      .selectize-input {
+  background-color: #000000 !important;  /* black background */
+  color: white !important;               /* white text */
+  border: 1px solid #7f8c8d !important;  /* subtle border */
+}
+
+.selectize-input input {
+  color: white !important;               /* typed text also white */
+}
+
+.selectize-dropdown {
+  background-color: #1c1c1c !important;  /* dropdown menu bg */
+  color: white !important;               /* dropdown item text */
+}
+
+.selectize-dropdown-content .option:hover {
+  background-color: #555 !important;
+  color: white !important;
+}
+
+      .plotly {
+        background-color: #2c3e50;
+      }
+    "))
+  ),
+  
+  titlePanel("📊 NSF Terminations Analysis"),
   
   sidebarLayout(
     sidebarPanel(
