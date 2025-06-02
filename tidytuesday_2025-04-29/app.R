@@ -7,8 +7,67 @@ library(stringr)
 user2025 <- read_csv("data/user2025.csv")
 
 ui <- fluidPage(
-  sliderInput("top_key", "Number of top keywords to display:", min = 5, max = 30, value = 10),
-  plotOutput("keyword_plot")
+  tags$head(
+    tags$style(HTML("
+      body {
+        background-color: #2c3e50;
+        color: white;
+        font-family: 'Segoe UI', sans-serif;
+      }
+
+      h2 {
+        font-weight: bold;
+        text-align: center;
+        color: white;
+        margin-top: 20px;
+      }
+
+      .slider-label, label {
+        color: white;
+        font-weight: 500;
+      }
+
+      .irs--shiny .irs-bar, 
+      .irs--shiny .irs-from, 
+      .irs--shiny .irs-to, 
+      .irs--shiny .irs-single {
+        background-color: orange;
+        border-color: orange;
+      }
+
+      .irs--shiny .irs-min, 
+      .irs--shiny .irs-max {
+        color: white;
+      }
+
+      .well {
+        background-color: rgba(255, 255, 255, 0.05);
+        border: none;
+      }
+      
+      .main-container {
+        background-color: #2c3e50;
+      }
+
+      .panel {
+        background-color: transparent !important;
+        box-shadow: none !important;
+    border: none !important;
+}
+    "))
+  ),
+  
+  titlePanel("🔍 Top Keywords at useR! 2025"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      sliderInput("top_key", "Number of top keywords to display:", min = 5, max = 30, value = 10)
+    ),
+    
+    mainPanel(
+      plotOutput("keyword_plot")
+    )
+  )
 )
 
 server <- function(input, output) {
@@ -22,7 +81,7 @@ server <- function(input, output) {
       slice_max(n, n = input$top_key) %>%
       mutate(keyword_short = str_wrap(str_trunc(keywords, width = 40), width = 20)) %>%
       ggplot(aes(x = reorder(keyword_short, n), y = n)) +
-      geom_col(fill = "darkorange") +
+      geom_col(fill = "orange") +
       coord_flip() +
       labs(title = "Top Keywords", x = "Keyword", y = "Count") +
       theme_minimal(base_size = 13)
