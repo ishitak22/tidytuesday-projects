@@ -14,19 +14,16 @@ ui <- fluidPage(
         color: white;
         font-family: 'Segoe UI', sans-serif;
       }
-
       h2 {
         font-weight: bold;
         text-align: center;
         color: white;
         margin-top: 20px;
       }
-
-      .slider-label, label {
+      label {
         color: white;
         font-weight: 500;
       }
-
       .irs--shiny .irs-bar, 
       .irs--shiny .irs-from, 
       .irs--shiny .irs-to, 
@@ -34,38 +31,25 @@ ui <- fluidPage(
         background-color: orange;
         border-color: orange;
       }
-
       .irs--shiny .irs-min, 
       .irs--shiny .irs-max {
         color: white;
       }
-
-      .well {
-        background-color: rgba(255, 255, 255, 0.05);
-        border: none;
-      }
-      
-      .main-container {
-        background-color: #2c3e50;
-      }
-
-      .panel {
-        background-color: transparent !important;
-        box-shadow: none !important;
-    border: none !important;
-}
     "))
   ),
   
   titlePanel("🔍 Top Keywords at useR! 2025"),
   
-  sidebarLayout(
-    sidebarPanel(
-      sliderInput("top_key", "Number of top keywords to display:", min = 5, max = 30, value = 10)
-    ),
-    
-    mainPanel(
-      plotOutput("keyword_plot")
+  # Slider above plot
+  fluidRow(
+    column(12,
+           sliderInput("top_key", "Number of top keywords to display:", min = 5, max = 30, value = 10)
+    )
+  ),
+  
+  fluidRow(
+    column(12,
+           plotOutput("keyword_plot", height = "500px")
     )
   )
 )
