@@ -1,0 +1,13 @@
+name: tidytuesday_2025-05-06
+title: tidytuesday_2025-05-06
+username: ishitakhanna
+account: ishitakhanna
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 14866061
+bundleId: 10383249
+url: https://ishitakhanna.shinyapps.io/tidytuesday_2025-05-06/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: eda.rmd|README.md
