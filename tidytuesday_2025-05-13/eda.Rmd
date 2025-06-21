@@ -10,6 +10,7 @@ runtime: shiny
 library(tidyverse)
 library(dplyr)
 library(shiny)
+library(viridis)
 
 vesuvius <- read_csv("data/vesuvius.csv")
 ```
@@ -20,17 +21,24 @@ glimpse(vesuvius)
 
 <!-- making an input slider filter as a ui shiny element, range of years -->
 
-```{r}
-sliderInput("yearRange", "Select year:",
+```{r, echo=FALSE}
+sliderInput("yearRange", "Select Year Range:",
             min = 2011, max = 2025, value = c(2013, 2025), sep = "")
 ```
 
 <!-- making an input select filter as a ui shiny element, their review status -->
 
-```{r}
+```{r, echo=FALSE}
 selectInput("review", "Review Level:",
             choices = c("All", "revised", "preliminary"), selected = "All")
 ```
+
+```{r, include=FALSE}
+unique(vesuvius$review_level)
+
+table(vesuvius$review_level, useNA = "ifany")
+```
+
 
 # Seismic Activity Timeline
 
@@ -57,28 +65,34 @@ renderPlot({
     data_filtered <- data_filtered %>%
       filter(review_level == input$review)
   }
-  
-  yearly_summary <- data_filtered %>%
-    drop_na(duration_magnitude_md) %>%
-    group_by(year) %>%
-    summarise(
-      count = n(),
-      avg_md = mean(duration_magnitude_md)
-    )
 
-  ggplot(yearly_summary, aes(x = year)) +
-    geom_area(aes(y = count), fill = "tan", alpha = 0.4) +
-    geom_line(aes(y = avg_md * 100), color = "red", size = 1) +
-    scale_y_continuous(
-      name = "Event Count",
-      sec.axis = sec_axis(~./100, name = "Avg Magnitude (Md)")
-    ) +
-    labs(
-      title = "Seismic Events Count and Average Magnitude per Year",
-      subtitle = "Trends in quantity and severity of seismic events (2011–2025)",
-      x = "Year"
-    ) +
-    theme_minimal()
+  if (nrow(data_filtered) < 5) {
+    ggplot() + 
+      annotate("text", x = 1, y = 1, label = "Too few data points for selected filter!", size = 6) +
+      theme_void()
+  } else {
+    yearly_summary <- data_filtered %>%
+      drop_na(duration_magnitude_md) %>%
+      group_by(year) %>%
+      summarise(
+        count = n(),
+        avg_md = mean(duration_magnitude_md)
+      )
+
+    ggplot(yearly_summary, aes(x = year)) +
+      geom_area(aes(y = count), fill = "tan", alpha = 0.4) +
+      geom_line(aes(y = avg_md * 100), color = "red", size = 1) +
+      scale_y_continuous(
+        name = "Event Count",
+        sec.axis = sec_axis(~./100, name = "Avg Magnitude (Md)")
+      ) +
+      labs(
+        title = "Seismic Events Count and Average Magnitude per Year",
+        subtitle = "Trends in quantity and severity of seismic events (2011–2025)",
+        x = "Year"
+      ) +
+      theme_minimal()
+  }
 })
 ```
 
