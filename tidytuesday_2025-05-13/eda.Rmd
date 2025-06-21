@@ -104,9 +104,9 @@ renderPlot({
 ### Approach:
 We plot depth vs year with magnitude as color:
 
- - Y-axis is depth (reversed: surface at top)
- - Color intensity = magnitude
- - Filterable by year and review level
+ - **Y-axis** is depth (reversed: surface at top)
+ - **Color intensity** = magnitude
+ - **Filters** by year and review level
  
 ### Answer we are looking for:
  
@@ -118,17 +118,21 @@ renderPlot({
   data <- vesuvius %>%
     filter(year >= input$yearRange[1], year <= input$yearRange[2]) %>%
     drop_na(depth_km, duration_magnitude_md)
-  
+
   if (input$review != "All") {
     data <- data %>% filter(review_level == input$review)
   }
-  
+
   ggplot(data, aes(x = year, y = depth_km, color = duration_magnitude_md)) +
-    geom_point(alpha = 0.6, size = 1) +
-    scale_y_reverse(name = "Depth (km)") +
-    scale_color_viridis_c(option = "inferno", name = "Magnitude") +
-    labs(title = "Seismic Event Depth Over Time") +
-    theme_minimal()
+    geom_point(alpha = 0.6, size = 1.2) +
+    scale_y_reverse(name = "Depth Below Surface (km)") +
+    scale_color_viridis_c(name = "Magnitude (Md)", option = "inferno") +
+    labs(
+      title = "Seismic Depth and Magnitude by Year",
+      subtitle = "Colored by magnitude; deeper activity trends visible",
+      x = "Year"
+    ) +
+    theme_minimal(base_size = 13)
 })
 ```
 
