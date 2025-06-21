@@ -46,7 +46,7 @@ To explore this, I have chosen *Area and Line chart* where users can filter the 
  - How has the frequency of seismic activity evolved over time?
  - Are higher magnitude events gradually becoming more or less frequent?
  
-```{r}
+```{r timeline, echo=FALSE}
 renderPlot({
   data_filtered <- vesuvius %>%
     filter(year >= input$yearRange[1], year <= input$yearRange[2])
@@ -96,3 +96,23 @@ We plot depth vs year with magnitude as color:
  
  - Are certain years more associated with deep activity?
  - Do deeper events have higher magnitudes?
+ 
+```{r depth_scatter, echo=FALSE}
+renderPlot({
+  data <- vesuvius %>%
+    filter(year >= input$yearRange[1], year <= input$yearRange[2]) %>%
+    drop_na(depth_km, duration_magnitude_md)
+  
+  if (input$review != "All") {
+    data <- data %>% filter(review_level == input$review)
+  }
+  
+  ggplot(data, aes(x = year, y = depth_km, color = duration_magnitude_md)) +
+    geom_point(alpha = 0.6, size = 1) +
+    scale_y_reverse(name = "Depth (km)") +
+    scale_color_viridis_c(option = "inferno", name = "Magnitude") +
+    labs(title = "Seismic Event Depth Over Time") +
+    theme_minimal()
+})
+```
+
