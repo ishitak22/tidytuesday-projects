@@ -6,7 +6,7 @@ output: html_document
 runtime: shiny
 ---
 
-```{r}
+```{r loading, include=FALSE}
 library(tidyverse)
 library(dplyr)
 library(shiny)
@@ -80,3 +80,19 @@ renderPlot({
 })
 ```
 
+# Depth Over Time
+
+### Question:
+*Do seismic events tend to occur deeper or shallower over the years?*
+
+### Approach:
+We plot depth vs year with magnitude as color:
+
+ - Y-axis is depth (reversed: surface at top)
+ - Color intensity = magnitude
+ - Filterable by year and review level
+ 
+### Answer we are looking for:
+ 
+ - Are certain years more associated with deep activity?
+ - Do deeper events have higher magnitudes?
