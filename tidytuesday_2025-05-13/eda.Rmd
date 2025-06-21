@@ -134,3 +134,37 @@ We group seismic events into 1 km depth bands and count the number of events in 
 
  - Do shallow or deep events dominate in certain years?
  - Has the seismic “depth profile” shifted in the past decade?
+ 
+```{r depth_band, echo=FALSE}
+renderPlot({
+  data <- vesuvius %>%
+    filter(year >= input$yearRange[1], year <= input$yearRange[2]) %>%
+    drop_na(depth_km)
+
+  if (input$review != "All") {
+    data <- data %>% filter(review_level == input$review)
+  }
+
+  data <- data %>%
+    mutate(depth_band = cut(depth_km, breaks = seq(0, 10, 1), include.lowest = TRUE, right = FALSE))
+
+  depth_summary <- data %>%
+    count(year, depth_band)
+
+  ggplot(depth_summary, aes(x = year, y = depth_band, fill = n)) +
+    geom_tile(color = "white") +
+    scale_fill_viridis_c(option = "plasma", name = "Event Count") +
+    labs(
+      title = "Seismic Event Density by Depth Band and Year",
+      x = "Year", y = "Depth Band (km)"
+    ) +
+    theme_minimal()
+})
+```
+
+
+
+
+
+
+
