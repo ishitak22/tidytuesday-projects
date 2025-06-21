@@ -164,19 +164,26 @@ renderPlot({
   }
 
   data <- data %>%
-    mutate(depth_band = cut(depth_km, breaks = seq(0, 10, 1), include.lowest = TRUE, right = FALSE))
+    mutate(depth_band = cut(depth_km, 
+                            breaks = seq(0, 10, 1), 
+                            include.lowest = TRUE, 
+                            right = FALSE, 
+                            labels = paste0(seq(0, 9), "–", seq(1, 10), " km")))
 
   depth_summary <- data %>%
     count(year, depth_band)
 
   ggplot(depth_summary, aes(x = year, y = depth_band, fill = n)) +
-    geom_tile(color = "white") +
-    scale_fill_viridis_c(option = "plasma", name = "Event Count") +
-    labs(
-      title = "Seismic Event Density by Depth Band and Year",
-      x = "Year", y = "Depth Band (km)"
-    ) +
-    theme_minimal()
+  geom_tile(color = "white") +
+  scale_fill_viridis_c(option = "plasma", name = "Event Count") +
+  scale_x_continuous(breaks = seq(min(depth_summary$year), max(depth_summary$year), 1)) +
+  labs(
+    title = "Heatmap: Seismic Activity by Depth Band (0–10 km)",
+    subtitle = "Grouped in 1 km bands; intensity by year",
+    x = "Year", 
+    y = "Depth Range (km)"
+  ) +
+  theme_minimal(base_size = 13)
 })
 ```
 
