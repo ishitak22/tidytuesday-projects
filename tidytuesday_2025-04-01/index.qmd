@@ -1,0 +1,34 @@
+---
+title: "Pokémon Power Grid Dashboard"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    page-layout: full
+editor: visual
+---
+
+# Exploratory Data Analysis
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(patchwork)
+```
+
+## Introduction
+
+This dashboard explores Pokemon stat design across generations using the 01-04-25 TidyTuesday dataset.
+
+```{r load_dataset, include=FALSE}
+pokemon_df <- read_csv("data/pokemon_df.csv")
+```
+
+```{r stat_distribution, echo=FALSE}
+df_long <- pokemon_df %>%
+  pivot_longer(
+    cols = c(hp, attack, defence, special_attack, special_defence, speed),
+    names_to = "stat",
+    values_to = "value"
+  )
+```
+
