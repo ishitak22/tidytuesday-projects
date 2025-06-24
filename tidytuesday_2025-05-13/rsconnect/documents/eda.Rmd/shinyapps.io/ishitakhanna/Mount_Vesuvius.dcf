@@ -1,0 +1,12 @@
+name: Mount_Vesuvius
+title: Mount_Vesuvius
+username: ishitakhanna
+account: ishitakhanna
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 14982063
+bundleId: 10508852
+url: https://ishitakhanna.shinyapps.io/Mount_Vesuvius/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
