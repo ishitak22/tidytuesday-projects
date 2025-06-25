@@ -1,6 +1,7 @@
 library(shiny)
 library(tidyverse)
 library(ggplot2)
+library(ggimage)
 
 pokemon_df <- read_csv("data/pokemon_df.csv")
 
@@ -52,9 +53,14 @@ ui <- fluidPage(
   
   fluidRow(
     column(
-      width = 12,
+      width = 6,
       h3("Average Stats by Generation"),
       plotOutput("generationPlot")
+    ),
+    column(
+      width = 6,
+      h3("Outlier Pokemon by Stat"),
+      plotOutput("outlierPlot")
     )
   )
 )
