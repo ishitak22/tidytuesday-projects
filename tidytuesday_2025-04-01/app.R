@@ -61,14 +61,20 @@ server <- function(input, output, session) {
   })
   
   output$generationPlot <- renderPlot({
-    ggplot(gen_avg, aes(x = generation_id, y = average, fill = stat)) +
-      geom_col(position = "dodge") +
+    ggplot(gen_avg, aes(x = factor(generation_id), y = average, fill = stat)) +
+      geom_col(position = position_dodge(width = 0.8), width = 0.7) +
       labs(
-        title = "Average Pokemon Stats by Generation",
+        title = "Average Pokémon Stats by Generation",
         x = "Generation",
-        y = "Average Stat"
+        y = "Average Stat",
+        fill = "Stat"
       ) +
-      theme_minimal()
+      theme_minimal(base_size = 14) +
+      theme(
+        plot.title = element_text(size = 16, face = "bold"),
+        axis.text.x = element_text(size = 12),
+        legend.position = "right"
+      )
   })
 }
 
