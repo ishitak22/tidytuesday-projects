@@ -31,7 +31,19 @@ ui <- fluidPage(
   
   fluidRow(
     column(
-      width = 12,
+      width = 6,
+      h3("Pokemon Power Grid"),
+      selectInput(
+        inputId = "selected_pokemon",
+        label = "Choose a Pokemon:",
+        choices = sort(unique(pokemon_df$pokemon)),
+        selected = "Pikachu"
+      ),
+      plotOutput("powerGridPlot")
+    ),
+  
+    column(
+      width = 6,
       h3("Stat Distribution"),
       plotOutput("histogramPlot")
     )
