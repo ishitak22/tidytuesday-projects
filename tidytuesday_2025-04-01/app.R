@@ -27,7 +27,7 @@ server <- function(input, output, session) {
   
   output$histogramPlot <- renderPlot({
     ggplot(df_long, aes(x = value, fill = stat)) +
-      geom_histogram(bina = 30, color = "white", alpha = 0.8) +
+      geom_histogram(bins = 30, color = "white", alpha = 0.8) +
       facet_wrap(~stat, scales = "free") +
       labs(
         title = "Distribution of Pokemon Stats",
