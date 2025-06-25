@@ -10,6 +10,15 @@ df_long <- pokemon_df %>%
     values_to = "value"
   )
 
+gen_avg <- pokemon_df %>%
+  group_by(generation_id) %>%
+  summarise(across(
+    c(hp, attack, defense, special_attack, special_defense, speed),
+    mean,
+    na.rm = TRUE
+  )) %>%
+  pivot_longer(-generation_id, names_to = "stat", values_to = "average")
+
 ui <- fluidPage(
   titlePanel("Pokemon Stat Dashboard - TidyTuesday 01-04-2025"),
   fluidRow(
