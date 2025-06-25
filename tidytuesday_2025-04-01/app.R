@@ -1,5 +1,6 @@
 library(shiny)
 library(tidyverse)
+library(ggplot2)
 
 pokemon_df <- read_csv("data/pokemon_df.csv")
 
@@ -88,6 +89,36 @@ server <- function(input, output, session) {
         legend.position = "right"
       )
   })
+  
+  output$powerGridPlot <- renderPlot({
+    selected <- pokemon_df %>%
+      filter(pokemon == input$selected_pokemon) %>%
+      select(hp, attack, defense, special_attack, special_defense, speed) %>%
+      pivot_longer(cols = everything(), names_to = "stat", values_to = "value")
+    
+    # Add manual grid layout (2 rows x 3 columns)
+    layout_map <- tibble(
+      stat = c("hp", "attack", "defense", "special_attack", "special_defense", "speed"),
+      row = c(1, 1, 1, 2, 2, 2),
+      col = c(1, 2, 3, 1, 2, 3)
+    )
+    
+    selected <- left_join(selected, layout_map, by = "stat")
+    
+    ggplot(selected, aes(x = col, y = row, fill = value)) +
+      geom_tile(width = 0.95, height = 0.95, color = "white") +
+      geom_text(aes(label = paste(stat, value, sep = "\n")), color = "white", size = 5, fontface = "bold") +
+      scale_fill_gradient(low = "#fcae91", high = "#fb6a4a") +
+      scale_y_reverse() +
+      coord_fixed() +  # Force square tiles
+      theme_void() +
+      theme(
+        legend.position = "none",
+        plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
+      ) +
+      labs(title = paste("Power Grid for", input$selected_pokemon))
+  })
+  
 }
 
 shinyApp(ui, server)
