@@ -26,9 +26,19 @@ pokemon_df <- read_csv("data/pokemon_df.csv")
 ```{r stat_distribution, echo=FALSE}
 df_long <- pokemon_df %>%
   pivot_longer(
-    cols = c(hp, attack, defence, special_attack, special_defence, speed),
+    cols = c(hp, attack, defense, special_attack, special_defense, speed),
     names_to = "stat",
     values_to = "value"
+  )
+
+ggplot(df_long, aes(x = value, fill = stat)) +
+  geom_histogram(bins = 30, alpha = 0.7, color = "white") +
+  facet_wrap(~stat, scales = "free") +
+  theme_minimal() +
+  labs(
+    title = "Distribution of Pokemon Stats",
+    x = "Stat Value",
+    y = "Count"
   )
 ```
 
