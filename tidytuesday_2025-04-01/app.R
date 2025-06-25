@@ -33,7 +33,7 @@ ui <- fluidPage(
     column(
       width = 12,
       h3("Stat Distribution"),
-      plotOutput("histogramplot")
+      plotOutput("histogramPlot")
     )
   ),
   
@@ -56,6 +56,17 @@ server <- function(input, output, session) {
         title = "Distribution of Pokemon Stats",
         x = "Stat Value",
         y = "Count"
+      ) +
+      theme_minimal()
+  })
+  
+  output$generationPlot <- renderPlot({
+    ggplot(gen_avg, aes(x = generation_id, y = average, fill = stat)) +
+      geom_col(position = "dodge") +
+      labs(
+        title = "Average Pokemon Stats by Generation",
+        x = "Generation",
+        y = "Average Stat"
       ) +
       theme_minimal()
   })
