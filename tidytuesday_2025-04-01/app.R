@@ -25,9 +25,15 @@ ui <- fluidPage(
     column(
       width = 12,
       h4("This dashboard explores Pokémon stat design across generations using the 01-04-2025 TidyTuesday dataset."),
-      p("We’ll look at how Pokemon stats are distributed, how they vary across generations, and visualise individual Pokemon profiles."),
+      p("We’ll look at how Pokemon stats are distributed, how they vary across generations, and visualise individual Pokemon profiles.")
+    )
+  ),
+  
+  fluidRow(
+    column(
+      width = 12,
       h3("Stat Distribution"),
-      plotOutput("histogramPlot")
+      plotOutput("histogramplot")
     )
   )
 )
