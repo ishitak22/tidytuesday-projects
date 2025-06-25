@@ -1,7 +1,7 @@
 library(shiny)
 library(tidyverse)
 
-pokemon_df <- read_csv("tidytuesday_2025-04-01/data/pokemon_df.csv")
+pokemon_df <- read_csv("data/pokemon_df.csv")
 
 df_long <- pokemon_df %>%
   pivot_longer(
@@ -23,6 +23,19 @@ ui <- fluidPage(
   )
 )
 
-server <- function(input, output, session) {}
+server <- function(input, output, session) {
+  
+  output$histogramPlot <- renderPlot({
+    ggplot(df_long, aes(x = value, fill = stat)) +
+      geom_histogram(bina = 30, color = "white", alpha = 0.8) +
+      facet_wrap(~stat, scales = "free") +
+      labs(
+        title = "Distribution of Pokemon Stats",
+        x = "Stat Value",
+        y = "Count"
+      ) +
+      theme_minimal()
+  })
+}
 
 shinyApp(ui, server)
