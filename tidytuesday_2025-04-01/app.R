@@ -35,6 +35,14 @@ ui <- fluidPage(
       h3("Stat Distribution"),
       plotOutput("histogramplot")
     )
+  ),
+  
+  fluidRow(
+    column(
+      width = 12,
+      h3("Average Stats by Generation"),
+      plotOutput("generationPlot")
+    )
   )
 )
 
