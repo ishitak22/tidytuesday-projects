@@ -5,6 +5,8 @@ format:
     theme: cosmo
     toc: true
     page-layout: full
+    self-contained: true
+output-dir: docs
 editor: visual
 ---
 
