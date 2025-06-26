@@ -3,7 +3,6 @@ library(tidyverse)
 library(ggplot2)
 library(ggtext)
 library(httr)
-library(bslib)
 
 pokemon_df <- read_csv("data/pokemon_df.csv")
 
