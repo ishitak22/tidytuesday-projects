@@ -1,7 +1,7 @@
 library(shiny)
 library(tidyverse)
 library(ggplot2)
-library(ggimage)
+library(ggtext)
 library(httr)
 library(bslib)
 
@@ -199,11 +199,13 @@ server <- function(input, output, session) {
              is_outlier = value < (Q1 - 1.5 * IQR) | value > (Q3 + 1.5 * IQR)) %>%
       filter(is_outlier) %>%
       ungroup() %>%
-      filter(map_lgl(url_image, is_valid_url))
+      filter(map_lgl(url_image, is_valid_url)) %>%
+      mutate(label = paste0("<img src='", url_image, "' width='25'/>"))
     
     ggplot(stat_data, aes(x = stat, y = value)) +
       geom_boxplot(outlier.shape = NA, fill = "#e0e0e0") +
-      ggimage::geom_image(data = outliers, aes(image = url_image), size = 0.05) +
+      ggtext::geom_richtext(data = outliers, aes(label = label),
+                            fill = NA, label.color = NA, size = 4) +
       labs(title = "Stat Outliers by Pokemon", x = "Stat", y = "Value") +
       theme_minimal(base_size = 14)
   })
