@@ -3,6 +3,7 @@ library(tidyverse)
 library(ggplot2)
 library(ggimage)
 library(httr)
+library(bslib)
 
 pokemon_df <- read_csv("data/pokemon_df.csv")
 
@@ -27,53 +28,75 @@ is_valid_url <- function(url) {
     status_code(HEAD(url)) == 200
   }, error = function(e) FALSE)
 }
-  
+
 ui <- fluidPage(
-    titlePanel("Pokemon Stat Dashboard - TidyTuesday 01-04-2025"),
-    
-    fluidRow(
-      column(
-        width = 12,
-        h4("This dashboard explores Pokémon stat design across generations using the 01-04-2025 TidyTuesday dataset."),
-        p("We’ll look at how Pokémon stats are distributed, how they vary across generations, and visualise individual Pokémon profiles.")
-      )
+  tags$head(
+    tags$link(
+      href = "https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap",
+      rel = "stylesheet"
+    ),
+    tags$style(HTML("
+    body {
+      background: linear-gradient(to right, #fefcea, #f1da36);
+    }
+    h1, h2, h3 {
+      font-family: 'Press Start 2P', cursive;
+    }
+    .container-fluid {
+      padding: 20px;
+    }
+  "))
+  ),
+  
+  tags$img(src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/149.png", 
+           height = "100px", style = "display: block; margin-left: auto; margin-right: auto;"),
+  
+  
+  titlePanel("Pokemon Stat Dashboard - TidyTuesday 01-04-2025"),
+  
+  fluidRow(
+    column(
+      width = 12,
+      h4("This dashboard explores Pokémon stat design across generations using the 01-04-2025 TidyTuesday dataset."),
+      p("We’ll look at how Pokemon stats are distributed, how they vary across generations, and visualise individual Pokémon profiles.")
+    )
+  ),
+  
+  fluidRow(
+    column(
+      width = 8,
+      h3("Outlier Pokemon by Stat"),
+      plotOutput("outlierPlot", height = "500px")
     ),
     
-    fluidRow(
-      column(
-        width = 8,
-        h3("Outlier Pokemon by Stat"),
-        plotOutput("outlierPlot", height = "500px")
+    column(
+      width = 4,
+      h3("Pokemon Power Grid"),
+      selectInput(
+        inputId = "selected_pokemon",
+        label = "Choose a Pokemon:",
+        choices = sort(unique(pokemon_df$pokemon)),
+        selected = "Pikachu"
       ),
-      
-      column(
-        width = 4,
-        h3("Pokemon Power Grid"),
-        selectInput(
-          inputId = "selected_pokemon",
-          label = "Choose a Pokemon:",
-          choices = sort(unique(pokemon_df$pokemon)),
-          selected = "Pikachu"
-        ),
-        plotOutput("powerGridPlot", height = "300px")
-      )
+      plotOutput("powerGridPlot", height = "300px")
+    )
+  ),
+  
+  fluidRow(
+    column(
+      width = 4,
+      h3("Stat Distribution"),
+      plotOutput("histogramPlot", height = "300px")
     ),
     
-    fluidRow(
-      column(
-        width = 4,
-        h3("Stat Distribution"),
-        plotOutput("histogramPlot", height = "300px")
-      ),
-      
-      column(
-        width = 8,
-        h3("Average Stats by Generation"),
-        plotOutput("generationPlot", height = "400px")
-      )
+    column(
+      width = 8,
+      h3("Average Stats by Generation"),
+      plotOutput("generationPlot", height = "400px")
     )
   )
-  
+)
+
 
 server <- function(input, output, session) {
   
