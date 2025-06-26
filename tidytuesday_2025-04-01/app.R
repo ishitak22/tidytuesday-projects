@@ -37,19 +37,26 @@ ui <- fluidPage(
     ),
     tags$style(HTML("
     body {
-      background: linear-gradient(to right, #fefcea, #f1da36);
+      background: linear-gradient(to right, #e0c3fc, #8ec5fc);
+      font-family: 'Verdana', sans-serif;
     }
     h1, h2, h3 {
       font-family: 'Press Start 2P', cursive;
+      color: #4b0082;
     }
-    .container-fluid {
-      padding: 20px;
-    }
-  "))
+      .mewtwo-img {
+  position: fixed;
+  top: 10px;
+  right: 20px;
+  width: 180px;  
+  opacity: 0.95;
+  z-index: 1000;
+}
+    "))
   ),
   
-  tags$img(src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/149.png", 
-           height = "100px", style = "display: block; margin-left: auto; margin-right: auto;"),
+  tags$img(src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png", 
+           class = "mewtwo-img"),
   
   
   titlePanel("Pokemon Stat Dashboard - TidyTuesday 01-04-2025"),
