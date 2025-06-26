@@ -64,8 +64,8 @@ ui <- fluidPage(
   fluidRow(
     column(
       width = 12,
-      h4("This dashboard explores Pokémon stat design across generations using the 01-04-2025 TidyTuesday dataset."),
-      p("We’ll look at how Pokemon stats are distributed, how they vary across generations, and visualise individual Pokémon profiles.")
+      h4("This dashboard explores Pokemon stat design across generations using the 01-04-2025 TidyTuesday dataset."),
+      p("We’ll look at how Pokemon stats are distributed, how they vary across generations, and visualise individual Pokemon profiles.")
     )
   ),
   
@@ -85,7 +85,27 @@ ui <- fluidPage(
         choices = sort(unique(pokemon_df$pokemon)),
         selected = "Pikachu"
       ),
-      plotOutput("powerGridPlot", height = "300px")
+      plotOutput("powerGridPlot", height = "300px"),
+      
+      br(),
+      div(style = "
+     margin-top: 10px;
+     margin-left: 0px;
+     padding: 10px 15px;
+     background-color: rgba(255, 255, 255, 0.88);
+     border-left: 4px solid #8e44ad;
+     border-radius: 10px;
+     font-size: 12px;
+     line-height: 1.4;
+     color: #2c3e50;
+     box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+     max-width: 100%;",
+          span("📊 Insight:", style = "font-weight: bold; font-size: 14px; color: #8e44ad;"),
+          br(), "Special Attack and Speed show wide variation across Pokemon, while Defense is more tightly clustered in the Stat Distribution plot.",
+          br(), "Generation 7 shows the highest average stats, reflecting evolving game design trends.",
+          br(), "The boxplot reveals standout outliers like Blissey for HP and Deoxys for Speed, indicating Pokemon with extreme specialisations.",
+          br(), "The Power Grid offers a quick comparison of individual Pokemon profiles which is useful for spotting balanced versus highly skewed stat spreads."
+      )
     )
   ),
   
@@ -123,7 +143,7 @@ server <- function(input, output, session) {
     ggplot(gen_avg, aes(x = factor(generation_id), y = average, fill = stat)) +
       geom_col(position = position_dodge(width = 0.8), width = 0.7) +
       labs(
-        title = "Average Pokémon Stats by Generation",
+        title = "Average Pokemon Stats by Generation",
         x = "Generation",
         y = "Average Stat",
         fill = "Stat"
@@ -142,7 +162,6 @@ server <- function(input, output, session) {
       select(hp, attack, defense, special_attack, special_defense, speed) %>%
       pivot_longer(cols = everything(), names_to = "stat", values_to = "value")
     
-    # Add manual grid layout (2 rows x 3 columns)
     layout_map <- tibble(
       stat = c("hp", "attack", "defense", "special_attack", "special_defense", "speed"),
       row = c(1, 1, 1, 2, 2, 2),
@@ -156,7 +175,7 @@ server <- function(input, output, session) {
       geom_text(aes(label = paste(stat, value, sep = "\n")), color = "white", size = 5, fontface = "bold") +
       scale_fill_gradient(low = "#fcae91", high = "#fb6a4a") +
       scale_y_reverse() +
-      coord_fixed() +  # Force square tiles
+      coord_fixed() +  
       theme_void() +
       theme(
         legend.position = "none",
@@ -185,7 +204,7 @@ server <- function(input, output, session) {
     ggplot(stat_data, aes(x = stat, y = value)) +
       geom_boxplot(outlier.shape = NA, fill = "#e0e0e0") +
       ggimage::geom_image(data = outliers, aes(image = url_image), size = 0.05) +
-      labs(title = "Stat Outliers by Pokémon", x = "Stat", y = "Value") +
+      labs(title = "Stat Outliers by Pokemon", x = "Stat", y = "Value") +
       theme_minimal(base_size = 14)
   })
   
