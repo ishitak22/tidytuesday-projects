@@ -64,8 +64,8 @@ ui <- fluidPage(
   fluidRow(
     column(
       width = 12,
-      h4("This dashboard explores Pokemon stat design across generations using the 01-04-2025 TidyTuesday dataset."),
-      p("We’ll look at how Pokemon stats are distributed, how they vary across generations, and visualise individual Pokemon profiles.")
+      h4("This dashboard explores Pokemon Stat design across generations using the 01-04-2025 TidyTuesday dataset."),
+      p("We’ll look at how Pokemon stats are distributed, how they vary across generations, what are the extreme pokemon cases and visualise individual Pokemon profiles.")
     )
   ),
   
@@ -113,7 +113,7 @@ ui <- fluidPage(
     column(
       width = 4,
       h3("Stat Distribution"),
-      plotOutput("histogramPlot", height = "300px")
+      plotOutput("histogramPlot", height = "400px")
     ),
     
     column(
