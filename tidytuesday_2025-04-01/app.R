@@ -201,12 +201,16 @@ server <- function(input, output, session) {
       filter(map_lgl(url_image, is_valid_url)) %>%
       mutate(label = paste0("<img src='", url_image, "' width='25'/>"))
     
-    ggplot(stat_data, aes(x = stat, y = value)) +
+    plot_img <- ggplot(stat_data, aes(x = stat, y = value)) +
       geom_boxplot(outlier.shape = NA, fill = "#e0e0e0") +
       ggtext::geom_richtext(data = outliers, aes(label = label),
                             fill = NA, label.color = NA, size = 4) +
       labs(title = "Stat Outliers by Pokemon", x = "Stat", y = "Value") +
       theme_minimal(base_size = 14)
+    
+    ggsave("image.png", plot = plot_img, width = 8, height = 5)
+    
+    plot_img
   })
   
   
