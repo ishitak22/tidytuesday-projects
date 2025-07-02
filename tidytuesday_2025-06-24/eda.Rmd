@@ -50,6 +50,10 @@ This dataset covers `r n_countries` countries across `r n_regions` global region
 
 The number of measles cases reported per country per year varies widely, with a **median of `r measles_median` cases** and a **maximum of `r measles_max`** in a single country-year. 
 
-Rubella case counts are much lower, with a **median of `r rubella_median` cases** and a **maximum of `r rubella_max`**. This highlights both the variability of outbreaks and underreporting or low incidence in some regions.
+Rubella case counts are much lower, with a **median of `r rubella_median` cases** and a **maximum of `r rubella_max`**. This highlights both the variability of outbreaks and under-reporting or low incidence in some regions.
 
+## Monthly Outbreak Fingerprints (Top Countries)
 
+To understand **seasonal patterns** in measles outbreaks, we visualise the monthly distribution of cases across the 12 most affected countries.
+
+This reveals outbreak "fingerprints" of how measles tends to spike during specific months in different regions.
