@@ -26,3 +26,11 @@ glimpse(cases_year)
 glimpse(cases_month)
 ```
 
+This report explores global measles and rubella case trends using data from the **WHO Provisional Measles & Rubella Surveillance Dataset (2012–2025)**.
+
+The goal of this analysis is to:
+
+ - Analyse **monthly and seasonal outbreak patterns** across countries.
+- Visualise how **measles spread over time and geography**.
+- Examine **reporting and surveillance quality**.
+- Highlight the **preventable human impact**.
