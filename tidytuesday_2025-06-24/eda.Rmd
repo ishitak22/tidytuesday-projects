@@ -4,9 +4,6 @@ author: "Ishita Khanna"
 date: "`r Sys.Date()`"
 output:
   html_document:
-    toc: true
-    toc_depth: 2
-    number_sections: true
     theme: flatly
     highlight: tango
     fig_caption: true
@@ -16,6 +13,7 @@ output:
 
 ```{r setup, include=FALSE}
 library(tidyverse)
+library(scales)
 ```
 
 ```{r dataset, include=FALSE}
@@ -34,3 +32,24 @@ The goal of this analysis is to:
 - Visualise how **measles spread over time and geography**.
 - Examine **reporting and surveillance quality**.
 - Highlight the **preventable human impact**.
+
+```{r eda-summary, include=FALSE}
+n_countries <- n_distinct(cases_year$country)
+n_regions <- n_distinct(cases_year$region)
+
+measles_median <- comma(median(cases_year$measles_total, na.rm = TRUE))
+measles_max <- comma(max(cases_year$measles_total, na.rm = TRUE))
+
+rubella_median <- comma(median(cases_year$rubella_total, na.rm = TRUE))
+rubella_max <- comma(max(cases_year$rubella_total, na.rm = TRUE))
+```
+
+## Summary of the Dataset
+
+This dataset covers `r n_countries` countries across `r n_regions` global regions. 
+
+The number of measles cases reported per country per year varies widely, with a **median of `r measles_median` cases** and a **maximum of `r measles_max`** in a single country-year. 
+
+Rubella case counts are much lower, with a **median of `r rubella_median` cases** and a **maximum of `r rubella_max`**. This highlights both the variability of outbreaks and underreporting or low incidence in some regions.
+
+
