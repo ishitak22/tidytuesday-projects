@@ -1,0 +1,15 @@
+---
+title: "Global Measles Outbreaks"
+author: "Ishita Khanna"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+    theme: flatly
+    highlight: tango
+    fig_caption: true
+    code_folding: hide
+    df_print: tibble
+---
