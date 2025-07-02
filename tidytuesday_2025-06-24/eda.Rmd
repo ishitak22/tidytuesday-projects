@@ -13,3 +13,16 @@ output:
     code_folding: hide
     df_print: tibble
 ---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+```
+
+```{r dataset, include=FALSE}
+cases_year <- read_csv("data/cases_year.csv")
+cases_month <- read_csv("data/cases_month.csv")
+
+glimpse(cases_year)
+glimpse(cases_month)
+```
+
