@@ -65,5 +65,10 @@ top_countries <- cases_month %>%
   arrange(desc(total_cases)) %>%
   slice_head(n = 12) %>%
   pull(country)
+
+heatmap_data <- cases_month %>%
+  filter(country %in% top_countries) %>%
+  group_by(country, month) %>%
+  summarise(total_cases = sum(measles_total, na.rm = TRUE), .groups = "drop")
 ```
 
