@@ -57,3 +57,13 @@ Rubella case counts are much lower, with a **median of `r rubella_median` cases*
 To understand **seasonal patterns** in measles outbreaks, we visualise the monthly distribution of cases across the 12 most affected countries.
 
 This reveals outbreak "fingerprints" of how measles tends to spike during specific months in different regions.
+
+```{r heatmap, echo = FALSE}
+top_countries <- cases_month %>%
+  group_by(country) %>%
+  summarise(total_cases = sum(measles_total, na.rm = TRUE)) %>%
+  arrange(desc(total_cases)) %>%
+  slice_head(n = 12) %>%
+  pull(country)
+```
+
