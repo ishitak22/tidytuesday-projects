@@ -89,3 +89,9 @@ ggplot(heatmap_data, aes(x = factor(month), y = fct_reorder(country, -total_case
   )
 ```
 
+## Vaccine Gap Slope Chart
+
+To explore the **disconnect between vaccination efforts and real-world outcomes**, we visualise the relationship between each country's **estimated vaccine coverage** and its **reported measles incidence rate**.
+
+- Weak surveillance or under-reporting  
+- Gaps in immunisation campaigns or follow-up doses  
