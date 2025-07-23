@@ -90,6 +90,17 @@ ggplot(heatmap_data, aes(x = factor(month), y = fct_reorder(country, -total_case
   )
 ```
 
+## Bubble Chart: Coverage vs. Incidence 
+
+To better understand how **estimated vaccine coverage** and **measles incidence** relate across countries, this bubble chart compares the two metrics.
+
+- **X-axis**: Estimated vaccine coverage (95 - incidence/100)
+- **Y-axis**: Mean annual incidence (per million people)
+- **Bubble size**: Total population
+- **Color**: WHO region
+
+This chart helps reveal **high-risk countries** those with **large populations**, **low coverage**, and **high incidence**, which should be prioritised for vaccination and surveillance efforts.
+
 ```{r bubble_data, include=FALSE}
 bubble_df <- cases_year %>%
   group_by(country, region) %>%
@@ -103,5 +114,6 @@ bubble_df <- cases_year %>%
     bubble_size = sqrt(total_population) / 1000     # scaled for plotting
   )
 ```
+
 
 
