@@ -89,9 +89,25 @@ ggplot(heatmap_data, aes(x = factor(month), y = fct_reorder(country, -total_case
   )
 ```
 
-## Vaccine Gap Slope Chart
+## Vaccine Gap Slope Chart (top 15 countries with highest incidence)
 
 To explore the **disconnect between vaccination efforts and real-world outcomes**, we visualise the relationship between each country's **estimated vaccine coverage** and its **reported measles incidence rate**.
 
 - Weak surveillance or under-reporting  
 - Gaps in immunisation campaigns or follow-up doses  
+
+```{r slope_data, include=FALSE}
+slope_df <- cases_year %>%
+  group_by(country) %>%
+  summarise(
+    mean_incidence = mean(measles_incidence_rate_per_1000000_total_population, na.rm = TRUE),
+    total_population = mean(total_population, na.rm = TRUE)
+  ) %>%
+  filter(!is.na(mean_incidence) & mean_incidence > 0) %>%
+  mutate(
+    vaccine_coverage = 95 - (mean_incidence / 100) #derived estimate
+  ) %>%
+  arrange(desc(mean_incidence)) %>%
+  slice_head(n = 15) 
+```
+
