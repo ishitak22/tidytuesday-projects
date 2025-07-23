@@ -111,9 +111,37 @@ slope_df <- cases_year %>%
   slice_head(n = 15) 
 ```
 
-```{r}
+```{r long_data, include = false}
 slope_df_long <- slope_df %>% pivot_longer(cols = c(vaccine_coverage, mean_incidence),
                               names_to = "metric",
                               values_to = "value")
+```
+
+```{r slope_chart, echo=FALSE}
+ggplot(slope_df_long, aes(x = metric, y = value, group = country)) +
+  geom_line(color = "#1f78b4", size = 1) +
+  geom_point(color = "#1f78b4", size = 2) +
+  geom_text(
+    data = slope_df_long %>% filter(metric == "vaccine_coverage"),
+    aes(label = country),
+    hjust = 1.1,
+    size = 3.5,
+    fontface = "italic"
+  ) +
+  scale_x_discrete(labels = c("Vaccine Coverage (%)", "Incidence per Million")) +
+  labs(
+    title = "Vaccine Gap: Countries with High Measles Incidence",
+    subtitle = "Comparing estimated vaccine coverage vs. actual incidence rates (Top 15 countries)",
+    y = NULL,
+    x = NULL
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = "bold", size = 14),
+    plot.subtitle = element_text(size = 11)
+  )
 ```
 
