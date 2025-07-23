@@ -90,5 +90,18 @@ ggplot(heatmap_data, aes(x = factor(month), y = fct_reorder(country, -total_case
   )
 ```
 
+```{r bubble_data, include=FALSE}
+bubble_df <- cases_year %>%
+  group_by(country, region) %>%
+  summarise(
+    mean_incidence = mean(measles_incidence_rate_per_1000000_total_population, na.rm = TRUE),
+    total_population = mean(total_population, na.rm = TRUE)
+  ) %>%
+  filter(!is.na(mean_incidence), mean_incidence > 0, total_population > 0) %>%
+  mutate(
+    vaccine_coverage = 95 - (mean_incidence / 100), # derived estimate
+    bubble_size = sqrt(total_population) / 1000     # scaled for plotting
+  )
+```
 
 
