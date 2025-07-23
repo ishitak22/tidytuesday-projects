@@ -111,3 +111,9 @@ slope_df <- cases_year %>%
   slice_head(n = 15) 
 ```
 
+```{r}
+slope_df_long <- slope_df %>% pivot_longer(cols = c(vaccine_coverage, mean_incidence),
+                              names_to = "metric",
+                              values_to = "value")
+```
+
