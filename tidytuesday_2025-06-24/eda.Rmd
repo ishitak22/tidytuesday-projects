@@ -115,5 +115,23 @@ bubble_df <- cases_year %>%
   )
 ```
 
-
+```{r bubbe_chart, echo=FALSE}
+ggplot(bubble_df, aes(x = vaccine_coverage, y = mean_incidence)) +
+  geom_point(aes(size = bubble_size, color = region), alpha = 0.7) +
+  scale_size_continuous(range = c(2, 12), name = "Population\n(approx, scaled)") +
+  scale_color_brewer(palette = "Set2") +
+  labs(
+    title = "Measles Incidence vs. Estimated Vaccine Coverage",
+    subtitle = "Bubble size represents population (Top countries by incidence)",
+    x = "Estimated Vaccine Coverage (%)",
+    y = "Mean Measles Incidence per Million",
+    color = "Region"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(face = "bold", size = 14),
+    plot.subtitle = element_text(size = 11)
+  )
+```
 
