@@ -2,20 +2,19 @@
 title: "Global Measles Outbreaks"
 author: "Ishita Khanna"
 date: "`r Sys.Date()`"
-output:
+output: 
   html_document:
     theme: flatly
-    highlight: tango
-    fig_caption: true
-    code_folding: hide
     df_print: tibble
 ---
 
 ```{r setup, include=FALSE}
 library(tidyverse)
+library(dplyr)
 library(tidyr)
 library(scales)
 library(ggplot2)
+library(plotly)
 ```
 
 ```{r dataset, include=FALSE}
@@ -101,7 +100,7 @@ To better understand how **estimated vaccine coverage** and **measles incidence*
 
 This chart helps reveal **high-risk countries** those with **large populations**, **low coverage**, and **high incidence**, which should be prioritised for vaccination and surveillance efforts.
 
-```{r bubble_data, include=FALSE}
+```{r bubble_data, include=FALSE, warning=FALSE}
 bubble_df <- cases_year %>%
   group_by(country, region) %>%
   summarise(
@@ -113,12 +112,23 @@ bubble_df <- cases_year %>%
     vaccine_coverage = 95 - (mean_incidence / 100), # derived estimate
     bubble_size = sqrt(total_population) / 1000     # scaled for plotting
   )
+
+bubble_df <- bubble_df %>%
+  mutate(
+    hover_text = paste0(
+      "Country: ", country, "\n",
+      "Region: ", region, "\n",
+      "Incidence: ", round(mean_incidence, 1), "\n",
+      "Coverage: ", round(vaccine_coverage, 1), "%\n",
+      "Population: ", scales::comma(round(total_population))
+    )
+  )
 ```
 
-```{r bubbe_chart, echo=FALSE}
-ggplot(bubble_df, aes(x = vaccine_coverage, y = mean_incidence)) +
-  geom_point(aes(size = bubble_size, color = region), alpha = 0.7) +
-  scale_size_continuous(range = c(2, 12), name = "Population\n(approx, scaled)") +
+```{r bubbe_chart, echo=FALSE, warning=FALSE}
+bubble_text <- ggplot(bubble_df, aes(x = vaccine_coverage, y = mean_incidence)) +
+  geom_point(aes(size = bubble_size, color = region, text = hover_text), alpha = 0.7)  +
+  scale_size_continuous(range = c(2, 12), name = "Population\n(scaled approx)") +
   scale_color_brewer(palette = "Set2") +
   labs(
     title = "Measles Incidence vs. Estimated Vaccine Coverage",
@@ -133,5 +143,7 @@ ggplot(bubble_df, aes(x = vaccine_coverage, y = mean_incidence)) +
     plot.title = element_text(face = "bold", size = 14),
     plot.subtitle = element_text(size = 11)
   )
+
+ggplotly(bubble_text, tooltip = "text")
 ```
 
