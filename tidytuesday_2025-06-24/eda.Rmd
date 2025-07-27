@@ -147,8 +147,16 @@ bubble_text <- ggplot(bubble_df, aes(x = vaccine_coverage, y = mean_incidence)) 
 ggplotly(bubble_text, tooltip = "text")
 ```
 
+## Scatter Plot: Reported Cases vs Incidence Rate
 
-```{r scatter, echo=FALSE}
+This plot compares **total reported measles cases** with **average incidence rate per million**, colored by WHO region.
+
+- **Top-left**: High incidence but low total cases, possible under-reporting.
+- **Top-right**: High incidence and high totals, likely accurate reporting.
+
+This view helps identify countries with potential gaps in **disease surveillance** or **reporting accuracy**.
+
+```{r scatter, echo=FALSE, warning=FALSE}
 cases_year %>%
   group_by(country, region) %>%
   summarise(
