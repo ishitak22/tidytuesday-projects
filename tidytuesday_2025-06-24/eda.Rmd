@@ -159,7 +159,7 @@ To better understand how **estimated vaccine coverage** and **measles incidence*
 
 This chart helps reveal **high-risk countries** those with **large populations**, **low vaccine coverage**, and **high incidence**, which should be prioritised for vaccination and surveillance efforts.
 
-```{r bubble_data, include=FALSE, warning=FALSE, fig.cap = "Figure 2: Measles Incidence vs. Estimated Vaccine Coverage (Bubble size = Population)"}
+```{r bubble_data, include=FALSE, warning=FALSE}
 bubble_df <- cases_year %>%
   group_by(country, region) %>%
   summarise(
@@ -184,7 +184,7 @@ bubble_df <- bubble_df %>%
   )
 ```
 
-```{r bubbe_chart, echo=FALSE, warning=FALSE}
+```{r bubbe_chart, echo=FALSE, warning=FALSE, results='asis'}
 bubble_text <- ggplot(bubble_df, aes(x = vaccine_coverage, y = mean_incidence)) +
   geom_point(aes(size = bubble_size, color = region, text = hover_text), alpha = 0.7)  +
   scale_size_continuous(range = c(2, 12), name = "Population\n(scaled approx)") +
@@ -207,6 +207,10 @@ htmltools::tags$div(
   style = "display: flex; justify-content: center;",
   ggplotly(bubble_text, tooltip = "text")
 )
+
+cat("<div style='text-align:center; font-style:italic; margin-top: 8px;'>
+Figure 2: Measles Incidence vs. Estimated Vaccine Coverage (Bubble size = Population)
+</div>")
 ```
 
 ------------------------------------------------------------------------
@@ -220,7 +224,7 @@ This plot compares **total reported measles cases** with **average incidence rat
 
 This helps identify **gaps in disease surveillance** across countries.
 
-```{r scatter, echo=FALSE, warning=FALSE}
+```{r scatter, echo=FALSE, warning=FALSE, fig.cap="Figure 3: Top-left = high incidence, low reporting | Top-right = high incidence & reporting"}
 cases_year %>%
   group_by(country, region) %>%
   summarise(
@@ -232,7 +236,7 @@ cases_year %>%
   filter(avg_incidence > 0, total_cases > 0) %>%
   ggplot(aes(x = total_cases, y = avg_incidence, label = country, color = region)) +
   geom_point(alpha = 0.7) +
-  geom_text(check_overlap = TRUE, size = 3, hjust = 1.1) +
+  geom_text(check_overlap = TRUE, size = 3, nudge_x = 0.1) +
   scale_x_log10(labels = comma) +
   scale_y_continuous(labels = comma) +
   scale_color_brewer(palette = "Set2") +
@@ -241,14 +245,15 @@ cases_year %>%
     subtitle = "Log-scale reveals anomalies: High incidence but low total cases may indicate under-reporting",
     x = "Total Measles Cases (log scale)",
     y = "Average Incidence per Million",
-    color = "WHO Region",
-    caption = "Top-left = high incidence, low reporting | Top-right = high incidence & reporting"
+    color = "WHO Region"
   ) +
+  coord_cartesian(clip = "off") +
   theme_minimal(base_size = 12) +
   theme(
     plot.title = element_text(face = "bold", size = 14),
     plot.subtitle = element_text(size = 11),
-    legend.position = "right"
+    legend.position = "right",
+    plot.margin = margin(12,20,10,20)
   )
 ```
 
