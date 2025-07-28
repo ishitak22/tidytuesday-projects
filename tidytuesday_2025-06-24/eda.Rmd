@@ -6,12 +6,22 @@ output:
   html_document:
     theme: flatly
     highlight: tango
-    number_sections: true
     df_print: paged
     fig_caption: true
 ---
 
 ```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  fig.width = 8,
+  fig.height = 5
+)
+```
+
+```{r loading, include=FALSE}
 library(tidyverse)
 library(dplyr)
 library(tidyr)
@@ -28,14 +38,27 @@ glimpse(cases_year)
 glimpse(cases_month)
 ```
 
-This report explores global measles and rubella case trends using data from the **WHO Provisional Measles & Rubella Surveillance Dataset (2012–2025)**.
+```{=html}
+<style>
+body {
+  font-family: "Roboto", sans-serif;
+  line-height: 1.6;
+  font-size: 16px;
+}
+</style>
+```
+::: {style="background-color:#e7f3fe; padding:15px; border-left:5px solid #2196F3;"}
+<h4><strong>Project Overview</strong></h4>
 
-The goal of this analysis is to:
+<p>This analysis explores global measles trends using WHO surveillance data. It identifies high-risk countries, outbreak patterns, and under-reporting regions to aid data-driven public health decisions.</p>
+:::
 
- - Analyse **monthly and seasonal outbreak patterns** across countries.
-- Visualise how **measles spread over time and geography**.
-- Evaluate **reporting and surveillance quality**.
-- Highlight the **preventable human impact** of measles outbreaks.
+<br> The goal of this analysis is to:
+
+-   **Analyse** monthly and seasonal outbreak patterns across countries.
+-   **Visualise** how measles spread over time and geography.
+-   **Evaluate** reporting and surveillance quality.
+-   **Highlight** the preventable human impact of measles outbreaks.
 
 ```{r eda-summary, include=FALSE}
 n_countries <- n_distinct(cases_year$country)
@@ -48,25 +71,27 @@ rubella_median <- comma(median(cases_year$rubella_total, na.rm = TRUE))
 rubella_max <- comma(max(cases_year$rubella_total, na.rm = TRUE))
 ```
 
----
+------------------------------------------------------------------------
 
 ## Summary of the Dataset
 
-This dataset covers `r n_countries` countries across `r n_regions` global regions. 
+This dataset covers **`r n_countries` countries** across **`r n_regions` global regions**.
 
-Measles case counts vary widely, with a **median of `r measles_median` cases** and a **maximum of `r measles_max`** reported in a single country-year. 
+**Measles** case counts vary widely, with a **median of `r measles_median` cases** and a **maximum of `r measles_max`** reported in a single country-year.
 
-Rubella case counts are much lower, with a **median of `r rubella_median` cases** and a **maximum of `r rubella_max`**. This highlights both the variability of outbreaks and under-reporting in some regions.
+**Rubella** case counts are much lower, with a **median of `r rubella_median` cases** (meaning half of country reported no cases at all) and a **maximum of `r rubella_max`**.
 
----
+This highlights both the variability of outbreaks and under-reporting in some regions.
+
+------------------------------------------------------------------------
 
 ## Monthly Outbreak Fingerprints (Top Countries)
 
-To understand **seasonal patterns** in measles outbreaks, we visualise the monthly distribution of cases across the 12 most affected countries.
+To understand **seasonal patterns** in measles outbreaks, we visualise the monthly distribution of cases across the **12 most affected countries**.
 
 This reveals outbreak "fingerprints" of how measles tends to spike during specific months in different regions.
 
-```{r heatmap, echo = FALSE}
+```{r heatmap, echo = FALSE, fig.cap = "Figure 1: Monthly Measles Outbreak Patterns in the Top 12 Countries"}
 top_countries <- cases_month %>%
   group_by(country) %>%
   summarise(total_cases = sum(measles_total, na.rm = TRUE)) %>%
@@ -96,20 +121,20 @@ ggplot(heatmap_data, aes(x = factor(month), y = fct_reorder(country, -total_case
   )
 ```
 
----
+------------------------------------------------------------------------
 
-## Bubble Chart: Coverage vs. Incidence 
+## Bubble Chart: Coverage vs. Incidence
 
 To better understand how **estimated vaccine coverage** and **measles incidence** relate across countries, this bubble chart compares the two metrics.
 
-- **X-axis**: Estimated vaccine coverage (95 - incidence/100)
-- **Y-axis**: Mean annual incidence (per million people)
-- **Bubble size**: Total population
-- **Color**: WHO region
+-   **X-axis**: Estimated vaccine coverage (95 - incidence/100)
+-   **Y-axis**: Mean annual incidence (per million people)
+-   **Bubble size**: Total population
+-   **Color**: WHO region
 
 This chart helps reveal **high-risk countries** those with **large populations**, **low vaccine coverage**, and **high incidence**, which should be prioritised for vaccination and surveillance efforts.
 
-```{r bubble_data, include=FALSE, warning=FALSE}
+```{r bubble_data, include=FALSE, warning=FALSE, fig.cap = "Figure 2: Measles Incidence vs. Estimated Vaccine Coverage (Bubble size = Population)"}
 bubble_df <- cases_year %>%
   group_by(country, region) %>%
   summarise(
@@ -156,14 +181,14 @@ bubble_text <- ggplot(bubble_df, aes(x = vaccine_coverage, y = mean_incidence)) 
 ggplotly(bubble_text, tooltip = "text")
 ```
 
----
+------------------------------------------------------------------------
 
 ## Scatter Plot: Reported Cases vs Incidence Rate
 
 This plot compares **total reported measles cases** with **average incidence rate per million**, colored by WHO region.
 
-- **Top-left**: High incidence but low total cases, possible **under-reporting**.
-- **Top-right**: High incidence and high totals, likely **accurate reporting**.
+-   **Top-left**: High incidence but low total cases, possible *under-reporting*.
+-   **Top-right**: High incidence and high totals, likely *accurate reporting*.
 
 This helps identify **gaps in disease surveillance** across countries.
 
@@ -199,4 +224,4 @@ cases_year %>%
   )
 ```
 
----
+------------------------------------------------------------------------
