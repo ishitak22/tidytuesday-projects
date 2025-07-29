@@ -11,13 +11,16 @@ output:
 ---
 
 <style>
-/* Expand content width */
 .main-container {
   max-width: 100% !important;
   padding: 0 30px;
 }
 
-/* Optional: improve figure size */
+body, .main-container {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
 .plot-container {
   width: 100% !important;
 }
@@ -26,11 +29,14 @@ output:
   margin: auto;
 }
 
-/* Optional: adjust figure captions */
 .figure > figcaption {
   text-align: center;
   font-style: italic;
-  color: #555;
+  color: #cccccc;
+}
+
+.plot, svg, .plotly, .ggplot {
+  background-color: transparent !important;
 }
 </style>
 
@@ -69,10 +75,11 @@ body {
   font-family: "Roboto", sans-serif;
   line-height: 1.6;
   font-size: 16px;
+  color: black;
 }
 </style>
 ```
-::: {style="background-color:#e7f3fe; padding:15px; border-left:5px solid #2196F3;"}
+::: {style="background-color:#e7f3fe; padding:15px; border-left:5px solid #2196F3; color:black;"}
 <h4><strong>Project Overview</strong></h4>
 
 <p>This analysis explores global measles trends using WHO surveillance data. It identifies high-risk countries, outbreak patterns, and under-reporting regions to aid data-driven public health decisions.</p>
@@ -139,10 +146,16 @@ ggplot(heatmap_data, aes(x = factor(month), y = fct_reorder(country, -total_case
   ) +
   theme_minimal(base_size = 12) +
   theme(
-    axis.text.x = element_text(size = 10),
-    axis.text.y = element_text(size = 10),
-    plot.title = element_text(face = "bold", size = 14),
-    legend.position = "right"
+    plot.background = element_rect(fill = "black", color = NA),
+    panel.background = element_rect(fill = "black", color = NA),
+    panel.grid = element_blank(),
+    axis.text = element_text(color = "white", size = 10),
+    axis.title = element_text(color = "white"),
+    plot.title = element_text(face = "bold", size = 14, color = "white"),
+    legend.text = element_text(color = "white"),
+    legend.title = element_text(color = "white"),
+    legend.background = element_rect(fill = "black", color = NA),
+    legend.key = element_rect(fill = "black", color = NA)
   )
 ```
 
@@ -224,7 +237,7 @@ This plot compares **total reported measles cases** with **average incidence rat
 
 This helps identify **gaps in disease surveillance** across countries.
 
-```{r scatter, echo=FALSE, warning=FALSE, fig.cap="Figure 3: Top-left = high incidence, low reporting | Top-right = high incidence & reporting"}
+```{r scatter, echo=FALSE, warning=FALSE, fig.cap="Figure 3: Top-left = high incidence, low reporting | Top-right = high incidence & reporting", fig.width=18, fig.height=8}
 cases_year %>%
   group_by(country, region) %>%
   summarise(
@@ -236,7 +249,7 @@ cases_year %>%
   filter(avg_incidence > 0, total_cases > 0) %>%
   ggplot(aes(x = total_cases, y = avg_incidence, label = country, color = region)) +
   geom_point(alpha = 0.7) +
-  geom_text(check_overlap = TRUE, size = 3, nudge_x = 0.1) +
+  geom_text(check_overlap = TRUE, size = 3.7, vjust = -0.5) +
   scale_x_log10(labels = comma) +
   scale_y_continuous(labels = comma) +
   scale_color_brewer(palette = "Set2") +
@@ -248,13 +261,22 @@ cases_year %>%
     color = "WHO Region"
   ) +
   coord_cartesian(clip = "off") +
-  theme_minimal(base_size = 12) +
+  theme_minimal(base_size = 13) +
   theme(
-    plot.title = element_text(face = "bold", size = 18),
-    plot.subtitle = element_text(size = 14),
-    legend.position = "right",
-    plot.margin = margin(12,20,10,20)
+    plot.title = element_text(face = "bold", size = 18, color = "white"),
+    plot.subtitle = element_text(size = 14, color = "white"),
+    axis.title = element_text(color = "white"),
+    axis.text = element_text(color = "white"),
+    legend.text = element_text(color = "white"),
+    legend.title = element_text(color = "white"),
+    plot.margin = margin(12, 20, 10, 20),
+    plot.background = element_rect(fill = "black", color = NA),
+    panel.background = element_rect(fill = "black", color = NA),
+    legend.background = element_rect(fill = "black"),
+    legend.key = element_rect(fill = "black")
   )
 ```
+
+
 
 ------------------------------------------------------------------------
